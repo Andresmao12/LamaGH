@@ -1,4 +1,55 @@
-﻿<div class="row">Container</div>
+﻿<div class="container p-2 m-0">
+
+    <input type="type" name="name" class="form-control w-100 mb-3" placeholder="Buscar publicacion"/>
+
+    <div class="container border p-3 d-flex flex-column gap-3">
+
+        <nav class="navbar gap-4 justify-content-start">
+
+            <button class="btn btn-dark">Mensaje</button>
+            <button class="btn">Multimedia</button>
+            <button class="btn">Evento</button>
+          
+        </nav>
+
+        <textarea class="text-area form-control form-control-lg border-primary rounded-3" rows="5" placeholder="Escribe lo que quieras..."></textarea>
+
+        <button class="btn btn-dark w-25 ">Mensaje</button>
+
+    </div>
+
+</div>
+
+<style>
+    .nav-item-active{
+        outline: 1px solid #aaa;
+    }
+    .navbar-nav{
+        background-color : #aaa;
+    }
+
+    .text-area{
+        resize : none
+    }
+</style>
+
+<script>
+
+    const nav = document.querySelector(".navbar")
+
+    nav.addEventListener("click", (e)=>{
+        if(e.target.tagName == "BUTTON"){
+
+            nav.querySelectorAll("button").forEach((element)=>{
+                element.classList.remove("btn-dark")
+            })
+
+            e.target.classList.add("btn-dark")
+        }
+    })
+
+</script>
+
 
 @code {
 
