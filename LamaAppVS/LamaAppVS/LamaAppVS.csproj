@@ -27,7 +27,6 @@
   <ItemGroup>
     <Folder Include="Components\Pages\Usuario\User_Account\Components\" />
     <Folder Include="Components\Pages\Usuario\User_Episodes\Components\" />
-    <Folder Include="Components\Pages\Usuario\User_Events\Components\" />
   </ItemGroup>
 
 </Project>

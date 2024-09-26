@@ -1,0 +1,47 @@
+﻿<div class="card text-bg-dark">
+    
+    <div class="card-img-overlay text-light">
+        <div class="text-cont position-absolute z-1">
+            <h5 class="card-title">Evento</h5>
+            <p class="fs-6">12/04/2024 | Medellin</p>
+            <p class="card-text">El Chevrolet Camaro es un icónico automóvil deportivo estadounidense fabricado por Chevrolet. Su historia comenzó en 1966 cuando se lanzó como respuesta directa al Ford Mustang.</p>
+            <p class="card-text text-secondary"><small>Last updated 3 mins ago</small></p>
+        </div>
+        
+    </div>
+</div>
+
+<style>
+
+    .text-cont{
+        bottom : 1em
+    }
+
+    .card {
+        position: relative;
+        background-image : url("Imagenes/Banner1.jpg")
+    }
+
+    .card:after{
+        content : "";
+        position: absolute;
+        width : 100%;
+        height : 100%;
+        background: rgb(2,0,36);
+        background: linear-gradient(0deg, rgba(2,0,36,1) 19%, rgba(9,9,121,0) 100%);
+     }
+
+    .card{
+        cursor : pointer;
+    }
+
+    .card:hover {
+        transform : scale(1.03);
+        transition : .5s;
+    }
+
+</style>
+
+@code {
+
+}
