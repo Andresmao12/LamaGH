@@ -1,7 +1,7 @@
 ﻿@page "/login"
 @using LamaAppVS.Components.Layout
-@using LamaAppVS.Components.Pages.HomeWithout.Components
-@layout LayoutWithout
+@* @using LamaAppVS.Components.Pages.HomeWithout.Components *@
+@layout MainLayout
 
 <main class="container vh-100">
     <div class="row mt-3">
@@ -25,7 +25,8 @@
                     <p>Forgot your password? <a href="#">reset it</a></p>
                 </div>
 
-                <button type="submit" id="btn-login" class="btn btn-dark">Send</button>
+                @* <button type="submit" id="btn-login" class="btn btn-dark">send</button> *@
+                <button id="btn-login" class="btn btn-dark" onclick="btnPress">Send</button>
             </form>
 
         </div>
@@ -36,5 +37,10 @@
 </main>
 
 @code {
+
+    // public void btnPress(e)
+    // {
+       
+    // }
 
 }
