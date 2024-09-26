@@ -1,0 +1,28 @@
+﻿@inherits LayoutComponentBase
+
+<div class="layout-container">
+    <Sidebar UserName="Andres Orozco" />
+    <div class="content">
+        @Body
+    </div>
+</div>
+
+<style>
+    .layout-container {
+        display: flex; /* Usar flexbox para alinear el sidebar y el contenido */
+    }
+
+    .content {
+        margin-left: 250px; /* Deja espacio para el sidebar */
+        padding: 20px;
+        flex-grow: 1; /* Asegura que el contenido ocupe el espacio restante */
+        min-height: 100vh;
+        background-color: #eeeeee;
+    }
+
+
+</style>
+
+@code {
+
+}

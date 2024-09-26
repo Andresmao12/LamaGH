@@ -1,0 +1,40 @@
+﻿
+<nav class="navbar navbar-expand-lg navbar-light w-100 border-bottom fixed-top bg-white">
+    <div class="container-fluid px-4 mt-5 mb-2">
+        <div class="row w-100">
+            <div class="col-12 col-md-6 d-flex align-items-center gap-4">
+                <h1 class="m-0 fw-bolder fs-3">LAMA</h1>
+
+                <ul class="navbar-nav gap-3">
+                    <li class="nav-item">
+                        <a class="nav-link active text-secondary" aria-current="page" href="#Home">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-secondary" aria-current="page" href="#Episodes">Episodios</a>
+                    </li>
+                </ul>
+               
+            </div>
+            <div class="col-12 col-md-6 d-flex align-items-center justify-content-end gap-4">
+                <div class="inp-container d-flex flex-column">
+                    @*
+                    <label for="searchEpisodes">Search episodes</label>
+                    *@
+
+                    <input id="searchEpisodes" type="text" class="form-control" placeholder="Search episodes..." />
+                </div>
+                @* Icono perfil o componente Blazor para el perfil
+
+                *@
+                <a role="button" class="btn btn-primary" href="/user">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+
+@code {
+
+}

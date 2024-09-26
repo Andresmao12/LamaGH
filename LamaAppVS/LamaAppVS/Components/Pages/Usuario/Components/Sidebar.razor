@@ -1,0 +1,23 @@
+﻿
+
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h1 class="fw-bold fs-2">LAMA</h1>
+        <p class="fs-6 text-secondary">@UserName</p>
+    </div>
+    <ul class="sidebar-options">
+        <li role="button"><a href="/user"><i class="fa-solid fa-house mx-3"></i>Inicio</a></li>
+        <li role="button"><a href="/user/episodes"><i class="fa-regular fa-location-dot mx-3"></i>Episodios</a></li>
+        <li role="button"><a href="/user/events"><i class="fa-regular fa-calendar mx-3"></i>Eventos</a></li>
+        <li class="border-bottom my-4"></li>
+        <li role="button"><a href="/user/incoming"><i class="fa-regular fa-user mx-3"></i>Cuenta</a></li>
+        <li role="button"><a href="/user/incoming"><i class="fa-solid fa-gear mx-3"></i>Opciones</a></li>
+        <li role="button"><a href="/user/incoming"><i class="fa-regular fa-flag mx-3"></i>Reportes</a></li>
+        <li role="button"><a href="/"><i class="fa-solid fa-right-from-bracket mx-3"></i>Salir</a></li>
+    </ul>
+</div>
+
+@code {
+    [Parameter]
+    public string UserName { get; set; } = "Usuario"; // Cambia esto según la lógica de tu aplicación
+}
