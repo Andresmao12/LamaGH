@@ -1,0 +1,43 @@
+﻿<div class="options-cont text-center row w-100 justify-content-center align-items-center gap-5 m-0 p-1 my-3">
+    <span class="option selected w-auto flex-grow-1">Publicaciones</span>
+    <span class="option w-auto flex-grow-1">Destacado</span>
+    <span class="option w-auto flex-grow-1">Informacion</span>
+</div>
+
+<style>
+    .option{
+        padding: 4px 8px;
+        color : #888;
+        cursor : pointer;
+    }
+
+    .selected{
+        background-color : #fff;
+        box-shadow : 0 0 5px -1px #999;
+        border-radius : 5px;
+        color : #000;
+        transition : 100ms;
+    }
+
+</style>
+
+<script>
+
+    const cont = document.querySelector(".options-cont")
+
+    cont.addEventListener("click", (e) => {
+        if (e.target.tagName == "SPAN") {
+
+            cont.querySelectorAll("span").forEach((element) => {
+                element.classList.remove("selected")
+            })
+
+            e.target.classList.add("selected")
+        }
+    })
+
+</script>
+
+@code {
+
+}
