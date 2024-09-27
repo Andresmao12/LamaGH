@@ -1,11 +1,22 @@
-﻿@page "/user/incoming"
+﻿@page "/user/account/public"
 @using LamaAppVS.Components.Pages.Usuario.User_Account.Layout_Account
+@using LamaAppVS.Components.Pages.Usuario.User_Home.Components
 @using LamaAppVS.Components.Pages.Usuario.User_Account.Components
 @layout Layout
 
-<div class="container d-flex flex-column w-auto h-auto p-0 justify-content-start">
-    <Nav/>
-</div>
+
+    <div class="row h-auto align-items-center justify-content-start gap-4 p-3 bg-light">
+    <Nav />
+
+        <Publicacion />
+        <Publicacion />
+        <Publicacion />
+        <Publicacion />
+        <Publicacion />
+    </div>
+
+
+
 
 @code {
 

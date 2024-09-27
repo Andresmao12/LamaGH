@@ -34,20 +34,19 @@
 </style>
 
 <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const nav = document.querySelector(".navbar");
 
-    const nav = document.querySelector(".navbar")
+        nav.addEventListener("click", (e) => {
+            if (e.target.tagName == "BUTTON") {
+                nav.querySelectorAll("button").forEach((element) => {
+                    element.classList.remove("btn-dark");
+                });
 
-    nav.addEventListener("click", (e)=>{
-        if(e.target.tagName == "BUTTON"){
-
-            nav.querySelectorAll("button").forEach((element)=>{
-                element.classList.remove("btn-dark")
-            })
-
-            e.target.classList.add("btn-dark")
-        }
-    })
-
+                e.target.classList.add("btn-dark");
+            }
+        });
+    });
 </script>
 
 
