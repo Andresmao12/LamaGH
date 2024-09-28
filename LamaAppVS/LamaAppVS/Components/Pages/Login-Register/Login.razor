@@ -1,5 +1,6 @@
 ﻿@page "/login"
 @using LamaAppVS.Components.Layout
+@inject NavigationManager Navigation
 @* @using LamaAppVS.Components.Pages.HomeWithout.Components *@
 @layout MainLayout
 
@@ -26,7 +27,7 @@
                 </div>
 
                 @* <button type="submit" id="btn-login" class="btn btn-dark">send</button> *@
-                <button id="btn-login" class="btn btn-dark" onclick="btnPress">Send</button>
+                <button id="btn-login" class="btn btn-dark" onclick="window.location.href = '/'">Send</button>
             </form>
 
         </div>
@@ -38,9 +39,6 @@
 
 @code {
 
-    // public void btnPress(e)
-    // {
-       
-    // }
+
 
 }

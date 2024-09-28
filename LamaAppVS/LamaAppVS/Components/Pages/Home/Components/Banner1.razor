@@ -9,14 +9,23 @@
                 <button type="button" class="btn btn-dark"  onclick="window.location.href = '/register'">Register</button>
             </div>
         </div>
-        <div class="col-6">
-            <div class="d-flex vh-100 justify-content-center align-items-center mt-5 px-4">
-                <img src="Imagenes/Banner1.jpg" alt="Banner 1" class="w-100 h-75 rounded-3 cover"/>
-            </div>
+        <div class="banner-image col-6 vh-100">
+               @*  <img src="Imagenes/Banner1.jpg" alt="Banner 1" class="w-100 h-100 rounded-3 cover"/> *@
         </div>
     </div>
     
 </div>
+
+<style>
+
+    .banner-image{
+        background-image: url("Imagenes/Banner1.jpg");
+        background-position : center;
+        background-size : cover;
+    }
+
+
+</style>
 
 @code {
 

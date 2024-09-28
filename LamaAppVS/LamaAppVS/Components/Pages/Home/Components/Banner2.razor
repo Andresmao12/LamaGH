@@ -1,13 +1,19 @@
 ﻿@using LamaAppVS.Components.Pages.Home.Components.Components
 
 <div class="vh-100 d-flex justify-content-center align-items-center flex-column gap-xxl-5" id="Episodes">
-    <h2 class="text-center fs-1 fw-bold">Capitulos destacados</h2>
-    <div class="grid-cols-3 px-5 gap-5">
-        <Target Capitulo="Montaña" Episodio="1"/>
-        <Target Capitulo="Montaña" Episodio="2" />
-        <Target Capitulo="Montaña" Episodio="3" />
+    <div class="container text-center ">
+        <h1 class="fs-1 fw-bold">Experience the Thrill of the Ride</h1>
+        <p class="fs-5 mb-4">Join our community of passionate motorcyclists. Watch exciting ride episodes and sign up for upcoming adventures.</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <button class="btn btn-dark btn-lg px-4 gap-3">Watch Latest Episode</button>
+            <button class="btn btn-outline-dark btn-lg px-4" onclick="window.location.href = '/login'">Sign Up for Rides</button>
+        </div>
     </div>
 </div>
+
+<style>
+
+</style>
 
 @code {
 

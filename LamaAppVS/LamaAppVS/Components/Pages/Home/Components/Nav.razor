@@ -1,6 +1,6 @@
 ﻿
-<nav class="navbar navbar-expand-lg navbar-light w-100 border-bottom fixed-top bg-white">
-    <div class="container-fluid px-4 mt-5 mb-2">
+<nav class="navbar navbar-expand-lg navbar-light w-100 border-bottom fixed-top bg-white h-auto">
+    <div class="container-fluid px-4 mt-3 mb-2">
         <div class="row w-100">
             <div class="col-12 col-md-6 d-flex align-items-center gap-4">
                 <h1 class="m-0 fw-bolder fs-3">LAMA</h1>
@@ -26,10 +26,40 @@
                 @* Icono perfil o componente Blazor para el perfil
 
                 *@
-                <a role="button" class="btn btn-primary" href="/user">
+
+                @* No sirve el modal para preguntar si iniciar sesion o registrarse *@
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="window.location.href = '/login'">
                     <i class="fa-solid fa-user"></i>
-                </a>
-                
+                </button>
+
+                @* Boton temporal para ingresar *@
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="window.location.href = '/user'">
+                    Acceso al inicio
+                </button>
+
+
+               @* BOTON TRIGGER *@
+               @*  <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalSesion">
+                    Launch static backdrop modal
+                </button>
+
+                    MODAL
+                <div class="modal fade" id="modalSesion " tabindex="-1" aria-hidden="true" aria-labelledby="label-modal-1">
+
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title">Titulo</h2>
+                            </div>
+                            <div class="modal-body">
+                                <h4>Contenido del modal</h4>
+                            </div>
+
+                        </div>
+                    </div>
+                </div> *@
+
+
             </div>
         </div>
     </div>
