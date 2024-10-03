@@ -1,5 +1,6 @@
-﻿namespace LamaAppVS.Models
+﻿namespace LamaAppVS.Shared.Models
 {
+
     public class Capitulo
     {
         public int ID_Capitulo { get; set; }
@@ -13,4 +14,7 @@
         // Relación con Evento
         public ICollection<Evento> Eventos { get; set; }
     }
+
+
 }
+

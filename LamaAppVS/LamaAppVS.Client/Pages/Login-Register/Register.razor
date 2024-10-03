@@ -1,5 +1,6 @@
 ﻿@page "/register"
 @using LamaAppVS.Client.Pages.Layout
+@using LamaAppVS.Shared.Models;
 @* @using LamaAppVS.Client.Pages.HomeWithout.Components *@
 @layout MainLayout
 
@@ -15,7 +16,7 @@
         </div>
     </div>
 
-
+    <EditForm FormName="formRegister" @* Model="@User" *@ OnSubmit="HandleFormSubmit" >
     <h4>Cuenta</h4>
     <div class="row mb-3">
         <div class="col">
@@ -40,7 +41,7 @@
     </div>
 
     <h4>Datos Personales</h4>
-    <form>
+
         <div class="row mb-3">
             <div class="col">
                 <label for="nombres" class="form-label">Nombres</label>
@@ -130,9 +131,17 @@
         </div>
 
 
-    </form>
+    </EditForm>
 </div>
 
 @code {
+    [SupplyParameterFromForm(FormName = "formRegister")]
+    public Usuario user { get; set; } = new Usuario();
+
+
+    public void HandleFormSubmit()
+    {
+        
+    }
 
 }

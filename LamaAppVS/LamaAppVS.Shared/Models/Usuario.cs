@@ -1,5 +1,5 @@
-﻿namespace LamaAppVS.Models
-{
+﻿namespace LamaAppVS.Shared.Models {
+
     public class Usuario
     {
         public int ID_Usuario { get; set; }
@@ -24,4 +24,7 @@
         // Relación con Publicación
         public ICollection<Publicacion> Publicaciones { get; set; }
     }
+
+
 }
+

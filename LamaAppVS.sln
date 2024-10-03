@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamaAppVS", "LamaAppVS\Lama
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamaAppVS.Client", "LamaAppVS\LamaAppVS.Client\LamaAppVS.Client.csproj", "{3A86BFD0-E00D-483C-BB1A-C56E1788BE57}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamaAppVS.Shared", "LamaAppVS\LamaAppVS.Shared\LamaAppVS.Shared.csproj", "{19B1D3D4-0429-4F2F-BC30-934C543A8C08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3A86BFD0-E00D-483C-BB1A-C56E1788BE57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A86BFD0-E00D-483C-BB1A-C56E1788BE57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A86BFD0-E00D-483C-BB1A-C56E1788BE57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19B1D3D4-0429-4F2F-BC30-934C543A8C08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19B1D3D4-0429-4F2F-BC30-934C543A8C08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19B1D3D4-0429-4F2F-BC30-934C543A8C08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19B1D3D4-0429-4F2F-BC30-934C543A8C08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,7 +2,7 @@
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using LamaAppVS.Models;
+using LamaAppVS.Shared.Models;
 
 public class PublicacionService
 {

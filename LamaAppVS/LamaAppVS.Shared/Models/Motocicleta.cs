@@ -1,4 +1,4 @@
-﻿namespace LamaAppVS.Models
+﻿namespace LamaAppVS.Shared.Models
 {
     public class Motocicleta
     {
@@ -12,4 +12,8 @@
         public int ID_Usuario { get; set; }
         public Usuario Usuario { get; set; }
     }
+
+
 }
+
+

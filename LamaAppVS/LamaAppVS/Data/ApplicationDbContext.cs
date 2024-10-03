@@ -11,7 +11,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using LamaAppVS.Models;
+using LamaAppVS.Shared.Models;
 
 namespace LamaAppVS.Data
 {

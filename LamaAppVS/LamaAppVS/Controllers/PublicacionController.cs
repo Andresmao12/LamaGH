@@ -1,5 +1,5 @@
 ﻿using LamaAppVS.Context;
-using LamaAppVS.Models;
+using LamaAppVS.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

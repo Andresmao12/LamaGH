@@ -1,4 +1,4 @@
-﻿namespace LamaAppVS.Models
+﻿namespace LamaAppVS.Shared.Models
 {
     public class Evento
     {
@@ -16,4 +16,7 @@
         // Relación con Inscripción
         public ICollection<Inscripcion> Inscripciones { get; set; }
     }
+
 }
+
+

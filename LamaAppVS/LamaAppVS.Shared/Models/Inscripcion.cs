@@ -1,6 +1,7 @@
-﻿namespace LamaAppVS.Models
+﻿namespace LamaAppVS.Shared.Models
 {
-    public class Inscripcion
+
+public class Inscripcion
     {
         public int ID_Inscripcion { get; set; }
         public DateTime Fecha_Compra { get; set; }
@@ -13,4 +14,8 @@
         public int ID_Usuario { get; set; }
         public Usuario Usuario { get; set; }
     }
+
+
+
 }
+

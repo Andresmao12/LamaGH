@@ -1,5 +1,5 @@
-﻿using LamaAppVS.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using LamaAppVS.Shared.Models;
 
 namespace LamaAppVS.Context
 {
