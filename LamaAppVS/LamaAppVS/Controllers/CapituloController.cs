@@ -1,4 +1,4 @@
-﻿using LamaAppVS.Context;
+﻿using LamaAppVS.Data;
 using LamaAppVS.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

@@ -9,8 +9,8 @@
         public string Placa { get; set; }
 
         // Relación con Usuario
-        public int ID_Usuario { get; set; }
         public Usuario Usuario { get; set; }
+
     }
 
 

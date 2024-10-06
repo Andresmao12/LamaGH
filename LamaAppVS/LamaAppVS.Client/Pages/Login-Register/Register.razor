@@ -16,27 +16,34 @@
         </div>
     </div>
 
-    <EditForm FormName="formRegister" @* Model="@User" *@ OnSubmit="HandleFormSubmit" >
+    <EditForm FormName="formRegister" Model="@user" OnSubmit="HandleFormSubmit">
     <h4>Cuenta</h4>
     <div class="row mb-3">
         <div class="col">
             <label for="usuario" class="form-label">Nombre de usuario</label>
-            <input type="text" class="form-control" id="usuario" placeholder="Usuario">
+            <InputText type="text" class="form-control" id="usuario" placeholder="Usuario" @bind-Value = "user.Nombre_Usuario" />
         </div>
         <div class="col">
             <label for="capitulo" class="form-label">Capitulo</label>
-            <input type="password" class="form-control" id="capitulo" placeholder="Capitulo">
-        </div>
+                <select @bind="@user.ID_Capitulo" class="form-select" id="capitulo">
+                    <option value="user.Capitulo">Seleccione un capítulo</option> 
+                    @* Capitulos sera donde se almacenara el nombre de los caps traidos de la bd
+                        @foreach (var capitulo in capitulos)
+                    {
+                        <option value="@capitulo.ID_Capitulo">@capitulo.Nombre</option>
+                    } *@
+                </select>
+            </div>
     </div>
 
     <div class="row mb-3">
         <div class="col">
             <label for="contrasena" class="form-label">Contraseña</label>
-            <input type="password" class="form-control" id="contrasena" placeholder="Contraseña">
+                <InputText type="password" class="form-control" id="contrasena" placeholder="Contraseña" @bind-Value="@user.Contraseña" />
         </div>
         <div class="col">
             <label for="contrasena" class="form-label">Confirmar contraseña</label>
-            <input type="password" class="form-control" id="contrasena" placeholder="Contraseña">
+                
         </div>
     </div>
 
@@ -45,17 +52,17 @@
         <div class="row mb-3">
             <div class="col">
                 <label for="nombres" class="form-label">Nombres</label>
-                <input type="text" class="form-control" id="nombres" placeholder="Nombres">
+                <InputText type="text" class="form-control" id="nombres" placeholder="Nombres" @bind-Value="@user.Nombre" />
             </div>
             <div class="col">
                 <label for="apellidos" class="form-label">Apellidos</label>
-                <input type="text" class="form-control" id="apellidos" placeholder="Apellidos">
+                <InputText type="text" class="form-control" id="apellidos" placeholder="Apellidos" @bind-Value="@user.Apellido" />
             </div>
         </div>
         <div class="row mb-3">
             <div class="col">
                 <label for="identificacion" class="form-label">Identificacion</label>
-                <input type="text" class="form-control" id="identificacion" placeholder="Número de Identificación">
+                <InputText type="text" class="form-control" id="identificacion" placeholder="Número de Identificación" @bind-Value="@user.Cedula" />
             </div>
             <div class="col">
                 <label for="tipo" class="form-label">Tipo de documento</label>
@@ -71,27 +78,27 @@
         <div class="row mb-3">
             <div class="col">
                 <label for="fechaNacimiento" class="form-label">Fecha Nacimiento</label>
-                <input type="date" class="form-control" id="fechaNacimiento">
+                <InputText type="date" class="form-control" id="fechaNacimiento" @* @bind-Value="@user.Fecha_Nacimiento.ToString" *@ />
             </div>
             <div class="col">
                 <label for="lugar" class="form-label">Lugar</label>
-                <input type="text" class="form-control" id="lugar" placeholder="Lugar de nacimiento">
+                <InputText type="text" class="form-control" id="lugar" placeholder="Lugar de nacimiento" />
             </div>
         </div>
         <div class="mb-3">
             <label for="direccionResidencia" class="form-label">Dirección Residencia</label>
-            <input type="text" class="form-control" id="direccionResidencia" placeholder="Dirección de residencia">
+            <InputText type="text" class="form-control" id="direccionResidencia" placeholder="Dirección de residencia" @* @bind-Value="@user.Direccion" *@ />
         </div>
 
         <div class="row mb-3">
             <div class="col">
                 <label for="telefonoResidencia" class="form-label">Teléfono Residencia</label>
-                <input type="text" class="form-control" id="telefonoResidencia" placeholder="Teléfono de residencia">
+                <InputText type="text" class="form-control" id="telefonoResidencia" placeholder="Teléfono de residencia" @* @bind-Value="@user.Telefono" *@ />
             </div>
 
             <div class="col">
                 <label for="celular" class="form-label">Celular</label>
-                <input type="text" class="form-control" id="celular" placeholder="Número de celular">
+                <InputText type="text" class="form-control" id="celular" placeholder="Número de celular" @bind-Value="@user.Contacto.Celular" />
             </div>
         </div>
 
@@ -100,12 +107,12 @@
         <div class="row mb-3">
             <div class="col">
                 <label for="nombrePareja" class="form-label">Nombre de la Pareja</label>
-                <input type="text" class="form-control" id="nombrePareja" placeholder="Nombre de la pareja">
+                <InputText type="text" class="form-control" id="nombrePareja" placeholder="Nombre de la pareja" @* @bind-Value="@user.Nombre" *@ />
             </div>
 
             <div class="col">
                 <label for="identificacionPareja" class="form-label">Numero de identificación</label>
-                <input type="text" class="form-control" id="identificacionPareja" placeholder="ID de la pareja">
+                <InputText type="text" class="form-control" id="identificacionPareja" placeholder="ID de la pareja" @* @bind-Value="@user.Nombre"  *@/>
             </div>  
         </div>
 
@@ -114,15 +121,15 @@
         <div class="row mb-3">
             <div class="col">
                 <label for="marcaMoto" class="form-label">Marca de Moto</label>
-                <input type="text" class="form-control" id="marcaMoto" placeholder="Marca de Moto">
+                <InputText type="text" class="form-control" id="marcaMoto" placeholder="Marca de Moto" @* @bind-Value="@user.Motocicletas.Marca" *@ />
             </div>
             <div class="col">
                 <label for="modeloMoto" class="form-label">Modelo</label>
-                <input type="text" class="form-control" id="modeloMoto" placeholder="Modelo">
+                <InputText type="text" class="form-control" id="modeloMoto" placeholder="Modelo" @* @bind-Value="@user.Motocicletas.Marca" *@ />
             </div>
             <div class="col">
                 <label for="anoMoto" class="form-label">Año</label>
-                <input type="text" class="form-control" id="anoMoto" placeholder="Año">
+                <InputText type="text" class="form-control" id="anoMoto" placeholder="Año" @* @bind-Value="@user.Motocicletas.Marca" *@ />
             </div>
         </div>
 
@@ -139,9 +146,9 @@
     public Usuario user { get; set; } = new Usuario();
 
 
-    public void HandleFormSubmit()
+    private async Task HandleFormSubmit()
     {
-        
+        // Lógica de envío del formulario
     }
 
 }

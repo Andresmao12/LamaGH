@@ -1,5 +1,6 @@
 ﻿@page "/login"
 @using LamaAppVS.Client.Pages.Layout
+@using LamaAppVS.Shared.Models
 @inject NavigationManager Navigation
 @* @using LamaAppVS.Client.Pages.HomeWithout.Components *@
 @layout MainLayout
@@ -19,16 +20,16 @@
         <div class=" target col-6 offset-3 border shadow-sm rounded-3 d-flex flex-column p-4 gap-3">
             <h2 class="text-center py-2">Login</h2>
 
-            <form action="" id="form-login" class=" d-flex flex-column gap-5 justify-content-around">
+            <EditForm FormName="formLogin" Model="@user" OnSubmit="HandleFormSubmit" id="form-login" class=" d-flex flex-column gap-5 justify-content-around">
                 <div class="d-flex flex-column gap-4">
-                    <input type="text" id="user" placeholder="User" class="w-100 form-control" />
-                    <input type="password" id="password" placeholder="Password" class="w-100 form-control" />
+                    <InputText type="text" id="user" placeholder="User" class="w-100 form-control" @bind-Value = "user.Nombre" />
+                    <InputText type="password" id="password" placeholder="Password" class="w-100 form-control" @bind-Value="user.Contraseña" />
                     <p>Forgot your password? <a href="#">reset it</a></p>
                 </div>
 
                 @* <button type="submit" id="btn-login" class="btn btn-dark">send</button> *@
                 <button id="btn-login" class="btn btn-dark" onclick="window.location.href = '/'">Send</button>
-            </form>
+            </EditForm>
 
         </div>
     </div>
@@ -38,7 +39,16 @@
 </main>
 
 @code {
+    //Verificar si esta bien manejado el form para este caso en especifico
 
+    [SupplyParameterFromForm(FormName = "formLogin")]
+    public Usuario user { get; set; } = new Usuario();
+
+
+    public void HandleFormSubmit()
+    {
+
+    }
 
 
 }

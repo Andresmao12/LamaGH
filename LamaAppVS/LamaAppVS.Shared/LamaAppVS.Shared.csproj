@@ -14,6 +14,8 @@
 
   <ItemGroup>
     <Compile Include="Models\Capitulo.cs" />
+    <Compile Include="Models\Pareja.cs" />
+    <Compile Include="Models\Contacto.cs" />
     <Compile Include="Models\Evento.cs" />
     <Compile Include="Models\Inscripcion.cs" />
     <Compile Include="Models\Motocicleta.cs" />
