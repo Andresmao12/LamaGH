@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using LamaAppVS.Shared.Models;
+using Microsoft.AspNetCore.Components.Forms;
 
 
 namespace LamaAppVS.Data
@@ -96,6 +97,25 @@ namespace LamaAppVS.Data
                 .HasMany(e => e.Inscripciones)
                 .WithOne(i => i.Evento)
                 .HasForeignKey(i => i.ID_Evento);
+
+            //Controlamos eliminacion en cascada
+
+            // Relación entre Inscripción y Usuario
+            modelBuilder.Entity<Inscripcion>()
+                .HasOne(i => i.Usuario)
+                .WithMany(u => u.Inscripciones)
+                .HasForeignKey(i => i.ID_Usuario)
+                .OnDelete(DeleteBehavior.Restrict);  // Evitar eliminar en cascada usuarios
+
+            // Relación entre Inscripción y Evento
+            modelBuilder.Entity<Inscripcion>()
+                .HasOne(i => i.Evento)
+                .WithMany(e => e.Inscripciones)
+            .HasForeignKey(i => i.ID_Evento)
+                .OnDelete(DeleteBehavior.Restrict); // Evitar eliminar en cascada eventos
+
+
+
         }
     }
 }

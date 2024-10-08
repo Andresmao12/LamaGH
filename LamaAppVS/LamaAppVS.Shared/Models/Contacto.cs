@@ -10,7 +10,7 @@ namespace LamaAppVS.Shared.Models
     {
 
         public int ID_Contacto { get; set; }
-        public int Direccion { get; set; }
+        public string Direccion { get; set; }
         public string Correo { get; set; }
         public string Celular { get; set; }
 

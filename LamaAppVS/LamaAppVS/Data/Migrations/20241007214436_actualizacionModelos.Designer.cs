@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LamaAppVS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241006132837_ActualizacionModelos2")]
-    partial class ActualizacionModelos2
+    [Migration("20241007214436_actualizacionModelos")]
+    partial class actualizacionModelos
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -271,13 +271,13 @@ namespace LamaAppVS.Migrations
                     b.HasOne("LamaAppVS.Shared.Models.Evento", "Evento")
                         .WithMany("Inscripciones")
                         .HasForeignKey("ID_Evento")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("LamaAppVS.Shared.Models.Usuario", "Usuario")
                         .WithMany("Inscripciones")
                         .HasForeignKey("ID_Usuario")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Evento");

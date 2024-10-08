@@ -1,6 +1,7 @@
 ﻿@page "/login"
-@using LamaAppVS.Client.Pages.Layout
-@using LamaAppVS.Shared.Models
+@using LamaAppVS.Client.Pages.Layout;
+@using LamaAppVS.Shared.Models;
+@using Microsoft.AspNetCore.Components.Forms;
 @inject NavigationManager Navigation
 @* @using LamaAppVS.Client.Pages.HomeWithout.Components *@
 @layout MainLayout
@@ -20,9 +21,9 @@
         <div class=" target col-6 offset-3 border shadow-sm rounded-3 d-flex flex-column p-4 gap-3">
             <h2 class="text-center py-2">Login</h2>
 
-            <EditForm FormName="formLogin" Model="@user" OnSubmit="HandleFormSubmit" id="form-login" class=" d-flex flex-column gap-5 justify-content-around">
+            <EditForm FormName="formLogin" Model="@user" OnValidSubmit="HandleFormSubmit" id="form-login" class=" d-flex flex-column gap-5 justify-content-around">
                 <div class="d-flex flex-column gap-4">
-                    <InputText type="text" id="user" placeholder="User" class="w-100 form-control" @bind-Value = "user.Nombre" />
+                    <InputText type="text" id="user" placeholder="User" class="w-100 form-control" @bind-Value="user.Nombre" />
                     <InputText type="password" id="password" placeholder="Password" class="w-100 form-control" @bind-Value="user.Contraseña" />
                     <p>Forgot your password? <a href="#">reset it</a></p>
                 </div>

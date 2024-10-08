@@ -10,7 +10,7 @@ namespace LamaAppVS.Shared.Models
     {
 
         public int ID_Pareja { get; set; }
-        public int Nombre { get; set; }
+        public string Nombre { get; set; }
         public string Cedula { get; set; }
 
         //Relacion 1 -> 1

@@ -268,13 +268,13 @@ namespace LamaAppVS.Migrations
                     b.HasOne("LamaAppVS.Shared.Models.Evento", "Evento")
                         .WithMany("Inscripciones")
                         .HasForeignKey("ID_Evento")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("LamaAppVS.Shared.Models.Usuario", "Usuario")
                         .WithMany("Inscripciones")
                         .HasForeignKey("ID_Usuario")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Evento");

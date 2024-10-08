@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LamaAppVS.Migrations
 {
     /// <inheritdoc />
-    public partial class ActualizacionModelos2 : Migration
+    public partial class actualizacionModelos : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -180,13 +180,13 @@ namespace LamaAppVS.Migrations
                         column: x => x.ID_Evento,
                         principalTable: "Eventos",
                         principalColumn: "ID_Evento",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Inscripciones_Usuarios_ID_Usuario",
                         column: x => x.ID_Usuario,
                         principalTable: "Usuarios",
                         principalColumn: "ID_Usuario",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
