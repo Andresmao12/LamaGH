@@ -1,0 +1,207 @@
+﻿@page "/register"
+
+@using Microsoft.AspNetCore.Components.Forms;
+
+@using LamaApp.Client.Pages.Layout;
+@using LamaApp.Shared;
+@using LamaApp.Client.Services;
+
+@layout MainLayout
+@inject IUsuarioService usuarioService;
+
+<div class="container my-5">
+    @if (formSubmitted)
+    {
+        <div class="alert alert-success" role="alert">
+
+            @($"El usuario {user.NombreUsuario} ha sido registrado con exito")
+        </div>
+    }
+    <div class="row">
+        <div class="col-10">
+            <h2 class="text-uppercase">Latin American Motorcycles Assoc.</h2>
+            <p>Formulario de Membresía</p>
+        </div>
+        <div class="col-2 d-flex justify-content-end align-items-start gap-2">
+            <button class="btn btn-outline-dark" onclick="window.location.href = '/login'">Login</button>
+            <button class="btn btn-outline-danger" onclick="window.location.href = '/'"><i class="fa-solid fa-house"></i></button>
+        </div>
+    </div>
+
+    @* Cambiar OnSubmit por OnValidSubmit, por ahora solo para poder validar el envio sin llenar todos los campos *@
+    <EditForm FormName="formRegister" Model="@user" OnSubmit="HandleFormSubmit">
+    <h4>Cuenta</h4>
+    <div class="row mb-3">
+        <div class="col">
+            <label for="usuario" class="form-label">Nombre de usuario</label>
+            <InputText type="text" class="form-control" id="usuario" placeholder="Usuario" @bind-Value="user.NombreUsuario" />
+        </div>
+        <div class="col">
+                <label for="capitulo" class="form-label">Capitulo</label>
+                <select @bind="@user.IdCapitulo" class="form-select" id="capitulo">
+                    <option value="">Seleccione un capítulo</option>
+                    @foreach (var capitulo in capitulos)
+                    {
+                        <option value="@capitulo.IdCapitulo">@capitulo.Nombre</option>
+                    }
+                </select>
+            </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <label for="contrasena" class="form-label">Contraseña</label>
+                <InputText type="password" class="form-control" id="contrasena" placeholder="Contraseña" autocomplete="off" @bind-Value="@user.Contraseña" />
+        </div>
+        <div class="col">
+            <label for="confirmContrasena" class="form-label">Confirmar contraseña</label>
+            <input type="password" class="form-control" id="ConfirmContrasena" placeholder="Contraseña" autocomplete="off" />
+        </div>
+    </div>
+
+    <h4>Datos Personales</h4>
+
+        <div class="row mb-3">
+            <div class="col">
+                <label for="nombres" class="form-label">Nombres</label>
+                <InputText type="text" class="form-control" id="nombres" placeholder="Nombres" @bind-Value="@user.Nombre" />
+            </div>
+            <div class="col">
+                <label for="apellidos" class="form-label">Apellidos</label>
+                <InputText type="text" class="form-control" id="apellidos" placeholder="Apellidos" @bind-Value="@user.Apellido" />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label for="identificacion" class="form-label">Identificacion</label>
+                <InputText type="text" class="form-control" id="identificacion" placeholder="Número de Identificación" @bind-Value="@user.Cedula" />
+            </div>
+            <div class="col">
+                <label for="tipo" class="form-label">Tipo de documento</label>
+                <select class="form-select" id="tipo">
+                    <option selected>Seleccione</option>
+                    <option selected>Cedula</option>
+                    <option selected>Pasaporte</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            
+           
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <label for="fechaNacimiento" class="form-label">Fecha Nacimiento</label>
+                <InputDate class="form-control" id="fechaNacimiento" @bind-Value="@user.FechaNacimiento" />
+            </div>
+            <div class="col">
+                <label for="lugar" class="form-label">Lugar</label>
+                <input type="text" class="form-control" id="lugar" placeholder="Lugar de nacimiento" />
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="direccionResidencia" class="form-label">Dirección Residencia</label>
+            <InputText type="text" class="form-control" id="direccionResidencia" placeholder="Dirección de residencia" @bind-Value="@user.Contacto.Direccion" />
+        </div>
+
+        <div class="row mb-3">
+
+            <div class="col">
+                <label for="celular" class="form-label">Celular</label>
+                <InputText type="text" class="form-control" id="celular" placeholder="Número de celular" @bind-Value="@user.Contacto.Celular" />
+            </div>
+
+            <div class="col">
+                <label for="inpCorreo" class="form-label">Correo</label>
+                <InputText type="text" class="form-control" id="inpCorreo" placeholder="Correo" @bind-Value="@user.Contacto.Correo" />
+            </div>
+
+        </div>
+
+        <h4>Datos Familiares</h4>
+        
+        <div class="row mb-3">
+            <div class="col">
+                <label for="nombrePareja" class="form-label">Nombre de la Pareja</label>
+                <InputText type="text" class="form-control" id="nombrePareja" placeholder="Nombre de la pareja" @bind-Value="@user.Pareja.Nombre" />
+            </div>
+
+            <div class="col">
+                <label for="identificacionPareja" class="form-label">Numero de identificación</label>
+                <InputText type="text" class="form-control" id="identificacionPareja" placeholder="ID de la pareja" @bind-Value="@user.Pareja.Cedula" />
+            </div>  
+        </div>
+
+
+        <h4>Datos de Vehículo Actual</h4>
+        <div class="row mb-3">
+            <div class="col">
+                <label for="marcaMoto" class="form-label">Marca de Moto</label>
+                <InputText type="text" class="form-control" id="marcaMoto" placeholder="Marca de Moto" @bind-Value="@user.Motocicleta.Marca" />
+            </div>
+            <div class="col">
+                <label for="modeloMoto" class="form-label">Modelo</label>
+                <InputText type="text" class="form-control" id="modeloMoto" placeholder="Modelo" @bind-Value="@user.Motocicleta.Modelo" />
+            </div>
+            <div class="col">
+                <label for="inpPlaca" class="form-label">Placa</label>
+                <InputText type="text" class="form-control" id="inpPlaca" placeholder="Placa" @bind-Value="@user.Motocicleta.Placa" />
+            </div>
+        </div>
+
+        <div class="row">
+            <button type="submit" class="col-6 offset-3 btn btn-dark shadow-sm my-4">Send</button>
+        </div>
+
+
+    </EditForm>
+
+</div>
+
+@code {
+    [SupplyParameterFromForm(FormName = "formRegister")]
+    public UsuarioSh user { get; set; } = new UsuarioSh
+        {
+            Contacto = new ContactoSh(),
+            Pareja = new ParejaSh(),
+            Motocicleta = new MotocicletaSh()
+        };
+
+
+    private List<CapituloSh> capitulos;
+
+    protected override void OnInitialized()
+    {
+
+        capitulos = new List<CapituloSh>
+        {
+            new CapituloSh { IdCapitulo = 1, Nombre = "Capítulo 1", Pais = "Argentina", Ciudad = "Buenos Aires" },
+            new CapituloSh { IdCapitulo = 2, Nombre = "Capítulo 2", Pais = "Chile", Ciudad = "Santiago" },
+            new CapituloSh { IdCapitulo = 3, Nombre = "Capítulo 3", Pais = "Colombia", Ciudad = "Bogotá" },
+            new CapituloSh { IdCapitulo = 4, Nombre = "Capítulo 4", Pais = "México", Ciudad = "Ciudad de México" },
+            new CapituloSh { IdCapitulo = 5, Nombre = "Capítulo 5", Pais = "España", Ciudad = "Madrid" }
+        };
+    }
+
+    private bool formSubmitted = false;
+
+
+    private async Task HandleFormSubmit()
+    {
+        formSubmitted = true;
+
+        try
+        {
+            var agg = await usuarioService.addUsuario(user);
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+
+        
+    }
+
+
+}

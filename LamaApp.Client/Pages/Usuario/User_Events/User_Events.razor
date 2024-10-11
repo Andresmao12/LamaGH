@@ -1,0 +1,42 @@
+﻿@page "/user/events"
+@using LamaApp.Client.Pages.Usuario.Layout
+@using LamaApp.Client.Pages.Usuario.User_Events.Components
+
+@layout UserLayout
+
+<div class="container p-2 m-0 border d-flex flex-column gap-2">
+    <div class="row p-2 justify-content-between">
+        <h2 class="col-auto fw-bold">Eventos</h2>
+        <button class=" col-auto btn btn-outline-dark mx-2"><i class="fa-solid fa-filter"></i></button>
+    </div>
+
+    <div class="caps-container d-grid grid-cols-3">
+
+      <Target/>
+      <Target/>
+      <Target />
+      <Target />
+      <Target />
+      <Target />
+      <Target />
+      <Target />
+      <Target />
+    
+
+    </div>
+
+</div>
+
+<style>
+
+    .caps-container{
+        grid-gap : 1.5em;
+        grid-template-rows : 400px;
+        grid-auto-rows : 400px;
+    }
+
+</style>
+
+@code {
+
+}

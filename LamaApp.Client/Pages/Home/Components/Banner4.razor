@@ -1,0 +1,26 @@
+﻿@using LamaApp.Client.Pages.Home.Components.Components
+
+<div class="vh-100 d-flex justify-content-center align-items-center flex-column gap-xxl-5 m-0" id="Episodes">
+    <h2 class="text-center fs-1 fw-bold">Capitulos</h2>
+    <div class="grid-cont w-100 px-5 gap-5 h-75 ">
+        <Target Capitulo="Montaña" Episodio="1" />
+        <Target Capitulo="Montaña" Episodio="2" />
+        <Target Capitulo="Montaña" Episodio="3" />
+        <Target Capitulo="Montaña" Episodio="3" />
+        <Target Capitulo="Montaña" Episodio="3" />
+        <Target Capitulo="Montaña" Episodio="3" />
+
+    </div>
+</div>
+
+<style>
+    .grid-cont{
+        display : grid;
+        grid-template-columns : repeat(3, 1fr);
+        grid-auto-rows : auto
+    }
+</style>
+
+@code {
+
+}
