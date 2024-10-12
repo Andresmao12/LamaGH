@@ -17,6 +17,14 @@
             @($"El usuario {user.NombreUsuario} ha sido registrado con exito")
         </div>
     }
+    @if (formError)
+    {
+        <div class="alert alert-danger" role="alert">
+
+            @($"Ocurrio un error en el envio del formulario")
+        </div>
+    }
+
     <div class="row">
         <div class="col-10">
             <h2 class="text-uppercase">Latin American Motorcycles Assoc.</h2>
@@ -184,19 +192,23 @@
     }
 
     private bool formSubmitted = false;
+    private bool formError = false;
 
 
     private async Task HandleFormSubmit()
     {
-        formSubmitted = true;
+
 
         try
         {
-            var agg = await usuarioService.addUsuario(user);
+            var result = await usuarioService.addUsuario(user);
+            formSubmitted = true;
+      
 
         }
         catch (Exception ex)
         {
+            formError = true;
             Console.WriteLine(ex);
         }
 
