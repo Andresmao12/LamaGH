@@ -7,7 +7,7 @@ public partial class Contacto
 {
     public int IdContacto { get; set; }
 
-    public int Direccion { get; set; }
+    public string Direccion { get; set; }
 
     public string Correo { get; set; } = null!;
 

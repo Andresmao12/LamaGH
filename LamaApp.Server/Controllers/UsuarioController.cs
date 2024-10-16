@@ -77,7 +77,7 @@ namespace LamaApp.Server.Controllers
 
 
         [HttpPost]
-        [Route("Usuario")]
+        [Route("add")]
         public async Task<IActionResult> PostUsuario(UsuarioSh usuario)
         {
             var responseApi = new ResponseApi<int>();
@@ -85,39 +85,71 @@ namespace LamaApp.Server.Controllers
             try
             {
 
-                var dbUsuario = new UsuarioSh
+                if (string.IsNullOrEmpty(usuario.NombreUsuario) || string.IsNullOrEmpty(usuario.Contraseña) ||
+                   string.IsNullOrEmpty(usuario.Nombre) || string.IsNullOrEmpty(usuario.Apellido) ||
+                   string.IsNullOrEmpty(usuario.Cedula) || usuario.FechaNacimiento == default)
+                {
+                    responseApi.mensaje = "Todos los campos obligatorios deben estar completos.";
+                    responseApi.statusCode = 400;
+                    return BadRequest(responseApi);
+                }
+
+
+                var dbUsuario = new Usuario
                 {
                     NombreUsuario = usuario.NombreUsuario,
                     Contraseña = usuario.Contraseña,
+                    Nombre = usuario.Nombre,
                     Apellido = usuario.Apellido,
                     Cedula = usuario.Cedula,
                     FechaNacimiento = usuario.FechaNacimiento,
                     FechaRegistro = DateTime.Now,
-                    Contacto = new ContactoSh()
+
+                    // Mapeo de Contacto
+                    Contacto = new Contacto
                     {
                         Direccion = usuario.Contacto.Direccion,
                         Celular = usuario.Contacto.Celular,
                         Correo = usuario.Contacto.Correo,
                     },
-                    Pareja = new ParejaSh()
+
+                    // Mapeo de Pareja
+                    Pareja = new Pareja
                     {
                         Nombre = usuario.Pareja.Nombre,
                         Cedula = usuario.Pareja.Cedula,
                     },
-                    Motocicleta = new MotocicletaSh()
+
+                    // Mapeo de Motocicleta
+                    Motocicleta = new Motocicleta
                     {
                         Marca = usuario.Motocicleta.Marca,
                         Modelo = usuario.Motocicleta.Modelo,
                         Placa = usuario.Motocicleta.Placa,
                         Cilindrada = usuario.Motocicleta.Cilindrada,
                     },
+
+                    // Id del capítulo
                     IdCapitulo = usuario.IdCapitulo
                 };
 
                 _dbContext.Add(dbUsuario);
-                await _dbContext.SaveChangesAsync();
+                //await _dbContext.SaveChangesAsync();
 
-                if (dbUsuario.IdUsuario != 0)
+
+                try
+                {
+                    // Intento de guardar cambios
+                    await _dbContext.SaveChangesAsync();
+                }
+                catch (DbUpdateException ex)
+                {
+                    var innerException = ex.InnerException;
+                    Console.WriteLine(innerException?.Message);
+                }
+
+
+                if (dbUsuario.IdUsuario != null)
                 {
                     responseApi.response = dbUsuario.IdUsuario;
                     responseApi.statusCode = 200;

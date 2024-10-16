@@ -7,7 +7,7 @@ public partial class Pareja
 {
     public int IdPareja { get; set; }
 
-    public int Nombre { get; set; }
+    public string Nombre { get; set; }
 
     public string Cedula { get; set; } = null!;
 

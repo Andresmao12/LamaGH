@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LamaApp.Server.Models;
 
-public partial class Publicacione
+public partial class Publicacion
 {
     public int IdPublicacion { get; set; }
 

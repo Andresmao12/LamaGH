@@ -21,5 +21,5 @@ public partial class Evento
 
     public virtual Capitulo IdCapituloNavigation { get; set; } = null!;
 
-    public virtual ICollection<Inscripcione> Inscripciones { get; set; } = new List<Inscripcione>();
+    public virtual ICollection<Inscripcion> Inscripciones { get; set; } = new List<Inscripcion>();
 }

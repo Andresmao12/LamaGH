@@ -7,7 +7,7 @@ namespace LamaApp.Client
         Task<List<UsuarioSh>> GetUsuario();
 
         Task<UsuarioSh> GetUsuario(int id);
-        Task<int> addUsuario(UsuarioSh usuario);
+        Task<ResponseApi<int>> addUsuario(UsuarioSh usuario);
 
         Task<bool> DeleteUsuario(int id);
 

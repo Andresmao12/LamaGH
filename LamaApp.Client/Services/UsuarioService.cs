@@ -40,19 +40,12 @@ namespace LamaApp.Client.Services
             }
         }
 
-        public async Task<int> addUsuario(UsuarioSh usuario)
+        public async Task<ResponseApi<int>> addUsuario(UsuarioSh usuario)
         {
-            var result = await _httpClient.PostAsJsonAsync("api/Usuario", usuario);
+            var result = await _httpClient.PostAsJsonAsync("api/Usuario/add", usuario);
             var response = await result.Content.ReadFromJsonAsync<ResponseApi<int>>();
 
-            if (response!.statusCode == 200)
-            {
-                return response.response!;
-            }
-            else
-            {
-                throw new Exception(response.mensaje);
-            }
+            return response;
         }
 
         public Task<bool> DeleteUsuario(int id)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LamaApp.Server.Models;
 
-public partial class Inscripcione
+public partial class Inscripcion
 {
     public int IdInscripcion { get; set; }
 
