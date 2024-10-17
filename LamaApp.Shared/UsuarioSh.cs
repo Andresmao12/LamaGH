@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace LamaApp.Shared {
 
@@ -44,10 +45,12 @@ namespace LamaApp.Shared {
 
         public ContactoSh? Contacto { get; set; }
 
+   
         public ParejaSh? Pareja { get; set; }
 
-        public CapituloSh? Capitulo { get; set; } 
+        public CapituloSh? Capitulo { get; set; }
 
+  
         public MotocicletaSh? Motocicleta { get; set; } 
 
     }
