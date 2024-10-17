@@ -4,9 +4,12 @@
 @using LamaApp.Client.Pages.Layout
 @using LamaApp.Shared
 @using LamaApp.Client.Services
+@using LamaApp.Client.Services.Capitulos
+@using System.Text.Json;
 
 @layout MainLayout
 @inject IUsuarioService usuarioService
+@inject ICapituloService capituloService
 @inject HttpClient httpClient
 
 <div class="container my-5">
@@ -50,9 +53,16 @@
                 <label for="capitulo" class="form-label">Capítulo</label>
                 <select @bind="user.IdCapitulo" class="form-select" id="capitulo">
                     <option value="">Seleccione un capítulo</option>
-                    @foreach (var capitulo in capitulos)
+                    @if (capitulos != null && capitulos.Count > 0)
                     {
-                        <option value="@capitulo.IdCapitulo">@capitulo.Nombre</option>
+                        @foreach (var capitulo in capitulos)
+                        {
+                            <option value="@capitulo.IdCapitulo">@capitulo.Nombre</option>
+                        }
+                    }
+                    else
+                    {
+                        <option disabled>Cargando capítulos...</option>
                     }
                 </select>
                 <ValidationMessage For="@(() => user.IdCapitulo)" />
@@ -187,18 +197,19 @@
     };
 
     private string confirmContrasena = string.Empty;
-    private List<CapituloSh> capitulos;
+    private List<CapituloSh> capitulos = new List<CapituloSh>();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        capitulos = new List<CapituloSh>
+        try
         {
-            new CapituloSh { IdCapitulo = 1, Nombre = "Capítulo 1", Pais = "Argentina", Ciudad = "Buenos Aires" },
-            new CapituloSh { IdCapitulo = 2, Nombre = "Capítulo 2", Pais = "Chile", Ciudad = "Santiago" },
-            new CapituloSh { IdCapitulo = 3, Nombre = "Capítulo 3", Pais = "Colombia", Ciudad = "Bogotá" },
-            new CapituloSh { IdCapitulo = 4, Nombre = "Capítulo 4", Pais = "México", Ciudad = "Ciudad de México" },
-            new CapituloSh { IdCapitulo = 5, Nombre = "Capítulo 5", Pais = "España", Ciudad = "Madrid" }
-        };
+            capitulos = await capituloService.GetCapitulos();
+            string jsonCapitulos = JsonSerializer.Serialize(capitulos, new JsonSerializerOptions { WriteIndented = true });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al obtener capítulos: {ex.Message}");
+        }
     }
 
     private bool formSubmitted = false;
