@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 
 namespace LamaApp.Client.Services
 {
-    public class UsuarioService:IUsuarioService
+    public class UsuarioService : IUsuarioService
     {
 
         private readonly HttpClient _httpClient;

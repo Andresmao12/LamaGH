@@ -1,6 +1,6 @@
 ﻿using LamaApp.Shared;
 
-namespace LamaApp.Client
+namespace LamaApp.Client.Services
 {
     public interface IUsuarioService
     {
