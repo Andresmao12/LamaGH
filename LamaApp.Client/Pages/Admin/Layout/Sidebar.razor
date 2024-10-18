@@ -1,0 +1,39 @@
+﻿
+<div class="sidebar col">
+    <div class="sidebar-header">
+        <h1 class="fw-bold fs-2">LAMA</h1>
+        <p class="fs-6 text-secondary">@UserName</p>
+    </div>
+    <ul class="sidebar-options">
+        <li role="button"><a href="/admin/stats"><i class="fa-solid fa-chart-simple mx-3"></i>Inicio</a></li>
+        <li role="button"><a href="/admin/episodes"<i class="fa-solid fa-location-dot mx-3"></i>Episodios</a></li>
+        <li role="button"><a href="/admin/events"><i class="fa-regular fa-calendar mx-3"></i>Eventos</a></li>
+        <li class="border-bottom my-4"></li>
+        <li role="button"><a href="#"><i class="fa-regular fa-user mx-3"></i>Cuenta</a></li>
+        <li role="button"><a href="#"><i class="fa-solid fa-gear mx-3"></i>Opciones</a></li>
+        <li role="button"><a href="#"><i class="fa-regular fa-flag mx-3"></i>Reportes</a></li>
+        <li role="button"><a href="#"><i class="fa-solid fa-right-from-bracket mx-3"></i>Salir</a></li>
+    </ul>
+</div>
+
+<style>
+    .sidebar {
+        background-color: #112;
+        color: #fff;
+    }
+
+    .sidebar-options li :is(a, i) {
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .sidebar-options li:hover :is(a, i) {
+        text-decoration: none;
+        color: #000;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public string UserName { get; set; } = "Usuario"; // Cambia esto según la lógica de tu aplicación
+}

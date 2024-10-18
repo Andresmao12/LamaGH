@@ -1,14 +1,15 @@
 ﻿using LamaApp.Shared;
 using System.Net.Http.Json;
 
-namespace LamaApp.Client.Services
+namespace LamaApp.Client.Services.Usuario
 {
     public class UsuarioService : IUsuarioService
     {
 
         private readonly HttpClient _httpClient;
 
-        public UsuarioService(HttpClient httpClient) { 
+        public UsuarioService(HttpClient httpClient)
+        {
             _httpClient = httpClient;
         }
 
@@ -45,8 +46,33 @@ namespace LamaApp.Client.Services
             var result = await _httpClient.PostAsJsonAsync("api/Usuario/add", usuario);
             var response = await result.Content.ReadFromJsonAsync<ResponseApi<int>>();
 
-            return response;
+            return response!;
         }
+
+
+        public async Task<ResponseApi<bool>> LoginVerif(string nombreUsuario, string plainPassword)
+        {
+            // Crear el objeto con los parámetros de login
+            var loginRequest = new LoginRequest
+            {
+                NombreUsuario = nombreUsuario,
+                PlainPassword = plainPassword
+            };
+
+            // Enviar la solicitud POST al servidor
+            var result = await _httpClient.PostAsJsonAsync("api/Usuario/login", loginRequest);
+            var response = await result.Content.ReadFromJsonAsync<ResponseApi<bool>>();
+
+            return response!;
+        }
+
+        public class LoginRequest
+        {
+            public string NombreUsuario { get; set; } = string.Empty;
+            public string PlainPassword { get; set; } = string.Empty;
+        }
+
+
 
         public Task<bool> DeleteUsuario(int id)
         {
@@ -58,6 +84,6 @@ namespace LamaApp.Client.Services
             throw new NotImplementedException();
         }
 
-       
+
     }
 }

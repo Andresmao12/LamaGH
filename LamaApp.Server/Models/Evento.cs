@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace LamaApp.Server.Models;
 
 public partial class Evento
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int IdEvento { get; set; }
 
     public DateTime FechaInicio { get; set; }
@@ -19,7 +23,7 @@ public partial class Evento
 
     public int IdCapitulo { get; set; }
 
-    public virtual Capitulo IdCapituloNavigation { get; set; } = null!;
+    public virtual Capitulo Capitulo { get; set; } = null!;
 
     public virtual ICollection<Inscripcion> Inscripciones { get; set; } = new List<Inscripcion>();
 }

@@ -1,11 +1,12 @@
 ﻿@page "/register"
 
 @using Microsoft.AspNetCore.Components.Forms
-@using LamaApp.Client.Pages.Layout
-@using LamaApp.Shared
-@using LamaApp.Client.Services
-@using LamaApp.Client.Services.Capitulos
 @using System.Text.Json;
+@using LamaApp.Shared
+@using LamaApp.Client.Pages.Layout
+@using LamaApp.Client.Services.Capitulos
+@using LamaApp.Client.Services.Usuario;
+
 
 @layout MainLayout
 @inject IUsuarioService usuarioService
@@ -22,7 +23,7 @@
     @if (formError)
     {
         <div class="alert alert-danger" role="alert">
-            @("Ocurrió un error en el envío del formulario.")
+            @(mensajeError)
         </div>
     }
 
@@ -32,14 +33,17 @@
             <p>Formulario de Membresía</p>
         </div>
         <div class="col-2 d-flex justify-content-end align-items-start gap-2">
-            <button class="btn btn-outline-dark" onclick="window.location.href = '/'">Login</button>
-            <button class="btn btn-outline-danger" onclick="window.location.href = '/login'"><i class="fa-solid fa-house"></i></button>
+            <button class="btn btn-outline-dark" onclick="window.location.href = '/login'">Login</button>
+            <button class="btn btn-outline-danger" onclick="window.location.href = '/'"><i class="fa-solid fa-house"></i></button>
         </div>
     </div>
 
     <EditForm Model="@user" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator />
+
+        @* Pensado para usar las validaciones de las clases internas o relacionadas (Contacto, moto, pareja) pero no funciona *@
         <ObjectGraphDataAnnotationsValidator />
+
 @*         <ValidationSummary /> *@
 
         <h4>Cuenta</h4>
@@ -50,8 +54,8 @@
                 <ValidationMessage For="@(() => user.NombreUsuario)" />
             </div>
             <div class="col">
-                <label for="capitulo" class="form-label">Capítulo</label>
-                <select @bind="user.IdCapitulo" class="form-select" id="capitulo">
+                <label for="capitulo" class="form-label">Seleccione un capítulo</label>
+                <InputSelect @bind-Value="user.IdCapitulo" class="form-select" id="capitulo">
                     <option value="">Seleccione un capítulo</option>
                     @if (capitulos != null && capitulos.Count > 0)
                     {
@@ -64,7 +68,7 @@
                     {
                         <option disabled>Cargando capítulos...</option>
                     }
-                </select>
+                </InputSelect>
                 <ValidationMessage For="@(() => user.IdCapitulo)" />
             </div>
         </div>
@@ -175,6 +179,11 @@
                 <ValidationMessage For="@(() => user.Motocicleta.Modelo)" />
             </div>
             <div class="col">
+                <label for="inpCilindrada" class="form-label">Cilindrada</label>
+                <InputNumber type="number" class="form-control" id="inpCilindrada" placeholder="Cilindrada" @bind-Value="user.Motocicleta.Cilindrada" />
+                <ValidationMessage For="@(() => user.Motocicleta.Cilindrada)" />
+            </div>
+            <div class="col">
                 <label for="inpPlaca" class="form-label">Placa</label>
                 <InputText type="text" class="form-control" id="inpPlaca" placeholder="Placa" @bind-Value="user.Motocicleta.Placa" />
                 <ValidationMessage For="@(() => user.Motocicleta.Placa)" />
@@ -236,7 +245,7 @@
             }
             else
             {
-                mensajeError = result?.mensaje;
+                mensajeError = result.mensaje;
                 formSubmitted = false;
                 formError = true;
             }
@@ -245,6 +254,7 @@
         }
         catch (Exception ex)
         {
+            mensajeError = "Ocurrio un error al enviar el formulario";
             formError = true;
             Console.WriteLine(ex);
         }

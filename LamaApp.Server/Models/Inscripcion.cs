@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace LamaApp.Server.Models;
 
 public partial class Inscripcion
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int IdInscripcion { get; set; }
 
     public DateTime FechaCompra { get; set; }
@@ -13,7 +17,9 @@ public partial class Inscripcion
 
     public int IdUsuario { get; set; }
 
-    public virtual Evento IdEventoNavigation { get; set; } = null!;
+    [ForeignKey(nameof(IdEvento))]
+    public virtual Evento Evento { get; set; } = null!;
 
-    public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
+    [ForeignKey(nameof(IdUsuario))]
+    public virtual Usuario Usuario { get; set; } = null!;
 }

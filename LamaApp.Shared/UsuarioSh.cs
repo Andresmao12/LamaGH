@@ -29,29 +29,28 @@ namespace LamaApp.Shared {
         public string Cedula { get; set; } = null!;
 
         [Required(ErrorMessage = "El campo es obligatorio.")]
-        public DateTime FechaNacimiento { get; set; }
+        public DateTime FechaNacimiento { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "El campo es obligatorio.")]
-        public DateTime FechaRegistro { get; set; }
+        public DateTime FechaRegistro { get; set; } 
 
         public int IdContacto { get; set; }
 
         public int IdPareja { get; set; }
 
+
+        [Required(ErrorMessage = "El campo es obligatorio.")]
         public int IdCapitulo { get; set; }
 
         public int IdMotocicleta { get; set; }
 
 
-        public ContactoSh? Contacto { get; set; }
+        public ContactoSh Contacto { get; set; } = null!;
 
-   
-        public ParejaSh? Pareja { get; set; }
 
-        public CapituloSh? Capitulo { get; set; }
+        public ParejaSh Pareja { get; set; } = null!;
 
-  
-        public MotocicletaSh? Motocicleta { get; set; } 
+        public MotocicletaSh Motocicleta { get; set; } = null!;
 
     }
 

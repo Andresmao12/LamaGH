@@ -1,0 +1,156 @@
+﻿@page "/admin/events"
+@using System.Text.Json;
+@using LamaApp.Client.Pages.Admin.Layout
+@using LamaApp.Shared
+@layout AdminLayout
+
+@inject HttpClient httpClient
+
+<div class="flex-grow-1 p-4">
+    <h2 class="h2 mb-4">Gestión de Eventos</h2>
+
+    <!-- Search and Add Event -->
+    <div class="d-flex justify-content-between mb-4">
+        <div class="w-25">
+            <input type="text" class="form-control" placeholder="Buscar evento...">
+        </div>
+        <button class="btn btn-primary" @onclick="OpenAddEventModal">
+            <i class="bi bi-plus-circle me-2"></i> Agregar Evento
+        </button>
+    </div>
+
+    <!-- Events Table -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Fecha</th>
+                <th>Ubicación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var evt in events)
+            {
+                <tr>
+                    <td>@evt.Id</td>
+                    <td>@evt.Title</td>
+                    <td>@evt.Date.ToShortDateString()</td>
+                    <td>@evt.Location</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-secondary me-2" @onclick="() => OpenEditEventModal(evt)">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteEvent(evt.Id)">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@if (showEventModal)
+{
+    <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@(editingEvent == null ? "Agregar Evento" : "Editar Evento")</h5>
+                    <button type="button" class="btn-close" @onclick="CloseEventModal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="eventTitle" class="form-label">Título</label>
+                        <input type="text" class="form-control" id="eventTitle" @bind="currentEvent.Title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventDate" class="form-label">Fecha</label>
+                        <input type="date" class="form-control" id="eventDate" @bind="currentEvent.Date">
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventLocation" class="form-label">Ubicación</label>
+                        <input type="text" class="form-control" id="eventLocation" @bind="currentEvent.Location">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseEventModal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" @onclick="SaveEvent">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    private List<Event> events = new List<Event>
+    {
+        new Event { Id = 1, Title = "Lanzamiento LAMA 2.0", Date = DateTime.Now.AddDays(30), Location = "Centro de Convenciones" },
+        new Event { Id = 2, Title = "Taller de LAMA para principiantes", Date = DateTime.Now.AddDays(15), Location = "Aula Virtual" },
+        new Event { Id = 3, Title = "Conferencia LAMA Experts", Date = DateTime.Now.AddDays(60), Location = "Hotel Metropol" }
+    };
+
+    private bool showEventModal = false;
+    private Event currentEvent = new Event();
+    private Event editingEvent = null;
+
+    private void OpenAddEventModal()
+    {
+        currentEvent = new Event();
+        editingEvent = null;
+        showEventModal = true;
+    }
+
+    private void OpenEditEventModal(Event evt)
+    {
+        currentEvent = new Event
+            {
+                Id = evt.Id,
+                Title = evt.Title,
+                Date = evt.Date,
+                Location = evt.Location
+            };
+        editingEvent = evt;
+        showEventModal = true;
+    }
+
+    private void CloseEventModal()
+    {
+        showEventModal = false;
+    }
+
+    private void SaveEvent()
+    {
+        if (editingEvent == null)
+        {
+            // Add new event
+            currentEvent.Id = events.Max(e => e.Id) + 1;
+            events.Add(currentEvent);
+        }
+        else
+        {
+            // Update existing event
+            var index = events.FindIndex(e => e.Id == editingEvent.Id);
+            events[index] = currentEvent;
+        }
+        CloseEventModal();
+    }
+
+    private void DeleteEvent(int id)
+    {
+        events.RemoveAll(e => e.Id == id);
+    }
+
+    private class Event
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public DateTime Date { get; set; }
+        public string Location { get; set; }
+    }
+}
+

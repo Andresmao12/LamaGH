@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamaApp.Server", "LamaApp.Server\LamaApp.Server.csproj", "{1239791C-6D13-4E63-B987-729124AED9EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamaApp.Server", "LamaApp.Server\LamaApp.Server.csproj", "{1239791C-6D13-4E63-B987-729124AED9EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamaApp.Shared", "LamaApp.Shared\LamaApp.Shared.csproj", "{08A4E7DA-FA84-4173-B2E6-E8A113A1963F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamaApp.Shared", "LamaApp.Shared\LamaApp.Shared.csproj", "{08A4E7DA-FA84-4173-B2E6-E8A113A1963F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LamaApp.Client", "LamaApp.Client\LamaApp.Client.csproj", "{440370E1-CA6F-4257-A161-25C2F2271457}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LamaApp.Client", "LamaApp.Client\LamaApp.Client.csproj", "{440370E1-CA6F-4257-A161-25C2F2271457}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

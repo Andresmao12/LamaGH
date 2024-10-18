@@ -12,7 +12,7 @@ namespace LamaApp.Server.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Capitulos",
+                name: "Capitulo",
                 columns: table => new
                 {
                     ID_Capitulo = table.Column<int>(type: "int", nullable: false)
@@ -23,26 +23,27 @@ namespace LamaApp.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Capitulos", x => x.ID_Capitulo);
+                    table.PrimaryKey("PK_Capitulo", x => x.ID_Capitulo);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Contactos",
+                name: "Contacto",
                 columns: table => new
                 {
                     ID_Contacto = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Direccion = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Correo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Celular = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Celular = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdUsuario = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Contactos", x => x.ID_Contacto);
+                    table.PrimaryKey("PK_Contacto", x => x.ID_Contacto);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Motocicletas",
+                name: "Motocicleta",
                 columns: table => new
                 {
                     ID_Motocicleta = table.Column<int>(type: "int", nullable: false)
@@ -50,29 +51,31 @@ namespace LamaApp.Server.Migrations
                     Marca = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Modelo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Cilindrada = table.Column<int>(type: "int", nullable: false),
-                    Placa = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Placa = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdUsuario = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Motocicletas", x => x.ID_Motocicleta);
+                    table.PrimaryKey("PK_Motocicleta", x => x.ID_Motocicleta);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Parejas",
+                name: "Pareja",
                 columns: table => new
                 {
                     ID_Pareja = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cedula = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Cedula = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdUsuario = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Parejas", x => x.ID_Pareja);
+                    table.PrimaryKey("PK_Pareja", x => x.ID_Pareja);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Eventos",
+                name: "Evento",
                 columns: table => new
                 {
                     ID_Evento = table.Column<int>(type: "int", nullable: false)
@@ -86,63 +89,61 @@ namespace LamaApp.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Eventos", x => x.ID_Evento);
+                    table.PrimaryKey("PK_Evento", x => x.ID_Evento);
                     table.ForeignKey(
-                        name: "FK_Eventos_Capitulos_ID_Capitulo",
+                        name: "FK_Evento_Capitulo_ID_Capitulo",
                         column: x => x.ID_Capitulo,
-                        principalTable: "Capitulos",
+                        principalTable: "Capitulo",
                         principalColumn: "ID_Capitulo",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Usuarios",
+                name: "Usuario",
                 columns: table => new
                 {
-                    ID_Usuario = table.Column<int>(type: "int", nullable: false),
+                    ID_Usuario = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Nombre_Usuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Contraseña = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Apellido = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cedula = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Nombre = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Apellido = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Cedula = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Fecha_Nacimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Fecha_Registro = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ID_Contacto = table.Column<int>(type: "int", nullable: false),
-                    ID_Pareja = table.Column<int>(type: "int", nullable: false),
+                    ID_Contacto = table.Column<int>(type: "int", nullable: true),
+                    ID_Pareja = table.Column<int>(type: "int", nullable: true),
                     ID_Capitulo = table.Column<int>(type: "int", nullable: false),
-                    ID_Motocicleta = table.Column<int>(type: "int", nullable: false)
+                    ID_Motocicleta = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Usuarios", x => x.ID_Usuario);
+                    table.PrimaryKey("PK_Usuario", x => x.ID_Usuario);
                     table.ForeignKey(
-                        name: "FK_Usuarios_Capitulos_ID_Capitulo",
+                        name: "FK_Usuario_Capitulo_ID_Capitulo",
                         column: x => x.ID_Capitulo,
-                        principalTable: "Capitulos",
+                        principalTable: "Capitulo",
                         principalColumn: "ID_Capitulo",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Usuarios_Contactos_ID_Contacto",
+                        name: "FK_Usuario_Contacto_ID_Contacto",
                         column: x => x.ID_Contacto,
-                        principalTable: "Contactos",
-                        principalColumn: "ID_Contacto",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "Contacto",
+                        principalColumn: "ID_Contacto");
                     table.ForeignKey(
-                        name: "FK_Usuarios_Motocicletas_ID_Motocicleta",
+                        name: "FK_Usuario_Motocicleta_ID_Motocicleta",
                         column: x => x.ID_Motocicleta,
-                        principalTable: "Motocicletas",
-                        principalColumn: "ID_Motocicleta",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "Motocicleta",
+                        principalColumn: "ID_Motocicleta");
                     table.ForeignKey(
-                        name: "FK_Usuarios_Parejas_ID_Pareja",
+                        name: "FK_Usuario_Pareja_ID_Pareja",
                         column: x => x.ID_Pareja,
-                        principalTable: "Parejas",
-                        principalColumn: "ID_Pareja",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "Pareja",
+                        principalColumn: "ID_Pareja");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Inscripciones",
+                name: "Inscripcion",
                 columns: table => new
                 {
                     ID_Inscripcion = table.Column<int>(type: "int", nullable: false)
@@ -153,21 +154,21 @@ namespace LamaApp.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Inscripciones", x => x.ID_Inscripcion);
+                    table.PrimaryKey("PK_Inscripcion", x => x.ID_Inscripcion);
                     table.ForeignKey(
-                        name: "FK_Inscripciones_Eventos_ID_Evento",
+                        name: "FK_Inscripcion_Evento_ID_Evento",
                         column: x => x.ID_Evento,
-                        principalTable: "Eventos",
+                        principalTable: "Evento",
                         principalColumn: "ID_Evento");
                     table.ForeignKey(
-                        name: "FK_Inscripciones_Usuarios_ID_Usuario",
+                        name: "FK_Inscripcion_Usuario_ID_Usuario",
                         column: x => x.ID_Usuario,
-                        principalTable: "Usuarios",
+                        principalTable: "Usuario",
                         principalColumn: "ID_Usuario");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Publicaciones",
+                name: "Publicacion",
                 columns: table => new
                 {
                     ID_Publicacion = table.Column<int>(type: "int", nullable: false)
@@ -177,85 +178,88 @@ namespace LamaApp.Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Publicaciones", x => x.ID_Publicacion);
+                    table.PrimaryKey("PK_Publicacion", x => x.ID_Publicacion);
                     table.ForeignKey(
-                        name: "FK_Publicaciones_Usuarios_ID_Usuario",
+                        name: "FK_Publicacion_Usuario_ID_Usuario",
                         column: x => x.ID_Usuario,
-                        principalTable: "Usuarios",
+                        principalTable: "Usuario",
                         principalColumn: "ID_Usuario",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Eventos_ID_Capitulo",
-                table: "Eventos",
+                table: "Evento",
                 column: "ID_Capitulo");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Inscripciones_ID_Evento",
-                table: "Inscripciones",
+                table: "Inscripcion",
                 column: "ID_Evento");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Inscripciones_ID_Usuario",
-                table: "Inscripciones",
+                table: "Inscripcion",
                 column: "ID_Usuario");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Publicaciones_ID_Usuario",
-                table: "Publicaciones",
+                table: "Publicacion",
                 column: "ID_Usuario");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Usuarios_ID_Capitulo",
-                table: "Usuarios",
-                column: "ID_Capitulo");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Usuarios_ID_Contacto",
-                table: "Usuarios",
+                name: "IX_Usuario_ID_Contacto",
+                table: "Usuario",
                 column: "ID_Contacto",
-                unique: true);
+                unique: true,
+                filter: "[ID_Contacto] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Usuarios_ID_Motocicleta",
-                table: "Usuarios",
+                name: "IX_Usuario_ID_Motocicleta",
+                table: "Usuario",
                 column: "ID_Motocicleta",
-                unique: true);
+                unique: true,
+                filter: "[ID_Motocicleta] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Usuarios_ID_Pareja",
-                table: "Usuarios",
+                name: "IX_Usuario_ID_Pareja",
+                table: "Usuario",
                 column: "ID_Pareja",
-                unique: true);
+                unique: true,
+                filter: "[ID_Pareja] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuarios_ID_Capitulo",
+                table: "Usuario",
+                column: "ID_Capitulo");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Inscripciones");
+                name: "Inscripcion");
 
             migrationBuilder.DropTable(
-                name: "Publicaciones");
+                name: "Publicacion");
 
             migrationBuilder.DropTable(
-                name: "Eventos");
+                name: "Evento");
 
             migrationBuilder.DropTable(
-                name: "Usuarios");
+                name: "Usuario");
 
             migrationBuilder.DropTable(
-                name: "Capitulos");
+                name: "Capitulo");
 
             migrationBuilder.DropTable(
-                name: "Contactos");
+                name: "Contacto");
 
             migrationBuilder.DropTable(
-                name: "Motocicletas");
+                name: "Motocicleta");
 
             migrationBuilder.DropTable(
-                name: "Parejas");
+                name: "Pareja");
         }
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LamaApp.Server.Migrations
 {
     [DbContext(typeof(LamaSqlContext))]
-    [Migration("20241016034546_firstMigration")]
+    [Migration("20241017230913_firstMigration")]
     partial class firstMigration
     {
         /// <inheritdoc />
@@ -48,7 +48,7 @@ namespace LamaApp.Server.Migrations
 
                     b.HasKey("IdCapitulo");
 
-                    b.ToTable("Capitulos");
+                    b.ToTable("Capitulo");
                 });
 
             modelBuilder.Entity("LamaApp.Server.Models.Contacto", b =>
@@ -72,9 +72,12 @@ namespace LamaApp.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("IdUsuario")
+                        .HasColumnType("int");
+
                     b.HasKey("IdContacto");
 
-                    b.ToTable("Contactos");
+                    b.ToTable("Contacto");
                 });
 
             modelBuilder.Entity("LamaApp.Server.Models.Evento", b =>
@@ -114,7 +117,7 @@ namespace LamaApp.Server.Migrations
 
                     b.HasIndex(new[] { "IdCapitulo" }, "IX_Eventos_ID_Capitulo");
 
-                    b.ToTable("Eventos");
+                    b.ToTable("Evento");
                 });
 
             modelBuilder.Entity("LamaApp.Server.Models.Inscripcion", b =>
@@ -144,7 +147,7 @@ namespace LamaApp.Server.Migrations
 
                     b.HasIndex(new[] { "IdUsuario" }, "IX_Inscripciones_ID_Usuario");
 
-                    b.ToTable("Inscripciones");
+                    b.ToTable("Inscripcion");
                 });
 
             modelBuilder.Entity("LamaApp.Server.Models.Motocicleta", b =>
@@ -157,6 +160,9 @@ namespace LamaApp.Server.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdMotocicleta"));
 
                     b.Property<int>("Cilindrada")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdUsuario")
                         .HasColumnType("int");
 
                     b.Property<string>("Marca")
@@ -173,7 +179,7 @@ namespace LamaApp.Server.Migrations
 
                     b.HasKey("IdMotocicleta");
 
-                    b.ToTable("Motocicletas");
+                    b.ToTable("Motocicleta");
                 });
 
             modelBuilder.Entity("LamaApp.Server.Models.Pareja", b =>
@@ -189,13 +195,16 @@ namespace LamaApp.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("IdUsuario")
+                        .HasColumnType("int");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdPareja");
 
-                    b.ToTable("Parejas");
+                    b.ToTable("Pareja");
                 });
 
             modelBuilder.Entity("LamaApp.Server.Models.Publicacion", b =>
@@ -218,22 +227,29 @@ namespace LamaApp.Server.Migrations
 
                     b.HasIndex(new[] { "IdUsuario" }, "IX_Publicaciones_ID_Usuario");
 
-                    b.ToTable("Publicaciones");
+                    b.ToTable("Publicacion");
                 });
 
             modelBuilder.Entity("LamaApp.Server.Models.Usuario", b =>
                 {
                     b.Property<int>("IdUsuario")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID_Usuario");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdUsuario"));
+
                     b.Property<string>("Apellido")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("Apellido");
 
                     b.Property<string>("Cedula")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("Cedula");
 
                     b.Property<string>("Contraseña")
                         .IsRequired()
@@ -251,21 +267,23 @@ namespace LamaApp.Server.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ID_Capitulo");
 
-                    b.Property<int>("IdContacto")
+                    b.Property<int?>("IdContacto")
                         .HasColumnType("int")
                         .HasColumnName("ID_Contacto");
 
-                    b.Property<int>("IdMotocicleta")
+                    b.Property<int?>("IdMotocicleta")
                         .HasColumnType("int")
                         .HasColumnName("ID_Motocicleta");
 
-                    b.Property<int>("IdPareja")
+                    b.Property<int?>("IdPareja")
                         .HasColumnType("int")
                         .HasColumnName("ID_Pareja");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("Nombre");
 
                     b.Property<string>("NombreUsuario")
                         .IsRequired()
@@ -275,56 +293,59 @@ namespace LamaApp.Server.Migrations
                     b.HasKey("IdUsuario");
 
                     b.HasIndex("IdContacto")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[ID_Contacto] IS NOT NULL");
 
                     b.HasIndex("IdMotocicleta")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[ID_Motocicleta] IS NOT NULL");
 
                     b.HasIndex("IdPareja")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[ID_Pareja] IS NOT NULL");
 
                     b.HasIndex(new[] { "IdCapitulo" }, "IX_Usuarios_ID_Capitulo");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Usuario");
                 });
 
             modelBuilder.Entity("LamaApp.Server.Models.Evento", b =>
                 {
-                    b.HasOne("LamaApp.Server.Models.Capitulo", "IdCapituloNavigation")
+                    b.HasOne("LamaApp.Server.Models.Capitulo", "Capitulo")
                         .WithMany("Eventos")
                         .HasForeignKey("IdCapitulo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("IdCapituloNavigation");
+                    b.Navigation("Capitulo");
                 });
 
             modelBuilder.Entity("LamaApp.Server.Models.Inscripcion", b =>
                 {
-                    b.HasOne("LamaApp.Server.Models.Evento", "IdEventoNavigation")
+                    b.HasOne("LamaApp.Server.Models.Evento", "Evento")
                         .WithMany("Inscripciones")
                         .HasForeignKey("IdEvento")
                         .IsRequired();
 
-                    b.HasOne("LamaApp.Server.Models.Usuario", "IdUsuarioNavigation")
+                    b.HasOne("LamaApp.Server.Models.Usuario", "Usuario")
                         .WithMany("Inscripciones")
                         .HasForeignKey("IdUsuario")
                         .IsRequired();
 
-                    b.Navigation("IdEventoNavigation");
+                    b.Navigation("Evento");
 
-                    b.Navigation("IdUsuarioNavigation");
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("LamaApp.Server.Models.Publicacion", b =>
                 {
-                    b.HasOne("LamaApp.Server.Models.Usuario", "IdUsuarioNavigation")
+                    b.HasOne("LamaApp.Server.Models.Usuario", "Usuario")
                         .WithMany("Publicaciones")
                         .HasForeignKey("IdUsuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("IdUsuarioNavigation");
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("LamaApp.Server.Models.Usuario", b =>
@@ -337,21 +358,15 @@ namespace LamaApp.Server.Migrations
 
                     b.HasOne("LamaApp.Server.Models.Contacto", "Contacto")
                         .WithOne("Usuario")
-                        .HasForeignKey("LamaApp.Server.Models.Usuario", "IdContacto")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LamaApp.Server.Models.Usuario", "IdContacto");
 
                     b.HasOne("LamaApp.Server.Models.Motocicleta", "Motocicleta")
                         .WithOne("Usuario")
-                        .HasForeignKey("LamaApp.Server.Models.Usuario", "IdMotocicleta")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LamaApp.Server.Models.Usuario", "IdMotocicleta");
 
                     b.HasOne("LamaApp.Server.Models.Pareja", "Pareja")
                         .WithOne("Usuario")
-                        .HasForeignKey("LamaApp.Server.Models.Usuario", "IdPareja")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LamaApp.Server.Models.Usuario", "IdPareja");
 
                     b.Navigation("Capitulo");
 
@@ -371,7 +386,8 @@ namespace LamaApp.Server.Migrations
 
             modelBuilder.Entity("LamaApp.Server.Models.Contacto", b =>
                 {
-                    b.Navigation("Usuario");
+                    b.Navigation("Usuario")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("LamaApp.Server.Models.Evento", b =>
@@ -381,12 +397,14 @@ namespace LamaApp.Server.Migrations
 
             modelBuilder.Entity("LamaApp.Server.Models.Motocicleta", b =>
                 {
-                    b.Navigation("Usuario");
+                    b.Navigation("Usuario")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("LamaApp.Server.Models.Pareja", b =>
                 {
-                    b.Navigation("Usuario");
+                    b.Navigation("Usuario")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("LamaApp.Server.Models.Usuario", b =>

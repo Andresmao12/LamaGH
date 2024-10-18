@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using LamaApp.Server.Models;
 using LamaApp.Shared;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace LamaApp.Server.Controllers
 {
@@ -30,7 +31,7 @@ namespace LamaApp.Server.Controllers
 
             try
             {
-                foreach (var item in await _dbContext.Usuarios.ToListAsync())
+                foreach (var item in await _dbContext.Usuario.ToListAsync())
                 {
                     listaUsuarios.Add(new UsuarioSh
                     {
@@ -65,7 +66,7 @@ namespace LamaApp.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Usuario>> GetUsuario(int id)
         {
-            var usuario = await _dbContext.Usuarios.FindAsync(id);
+            var usuario = await _dbContext.Usuario.FindAsync(id);
 
             if (usuario == null)
             {
@@ -94,11 +95,24 @@ namespace LamaApp.Server.Controllers
                     return BadRequest(responseApi);
                 }
 
+                var capituloExists = await _dbContext.Capitulo.AnyAsync(c => c.IdCapitulo == usuario.IdCapitulo);
+                if (!capituloExists)
+                {
+                    responseApi.mensaje = "El capítulo especificado no existe.";
+                    responseApi.statusCode = 404;
+                    return NotFound(responseApi);
+                }
+
+                var passwordHasher = new PasswordHasher<UsuarioSh>();
+                string hashedPassword = passwordHasher.HashPassword(usuario, usuario.Contraseña);
 
                 var dbUsuario = new Usuario
                 {
                     NombreUsuario = usuario.NombreUsuario,
-                    Contraseña = usuario.Contraseña,
+                    Contraseña = hashedPassword,
+                    // Id del capítulo
+                    IdCapitulo = usuario.IdCapitulo,
+                
                     Nombre = usuario.Nombre,
                     Apellido = usuario.Apellido,
                     Cedula = usuario.Cedula,
@@ -127,10 +141,7 @@ namespace LamaApp.Server.Controllers
                         Modelo = usuario.Motocicleta.Modelo,
                         Placa = usuario.Motocicleta.Placa,
                         Cilindrada = usuario.Motocicleta.Cilindrada,
-                    },
-
-                    // Id del capítulo
-                    IdCapitulo = usuario.IdCapitulo
+                    }
                 };
 
                 _dbContext.Add(dbUsuario);
@@ -144,8 +155,9 @@ namespace LamaApp.Server.Controllers
                 }
                 catch (DbUpdateException ex)
                 {
-                    var innerException = ex.InnerException;
-                    Console.WriteLine(innerException?.Message);
+                    responseApi.mensaje = "Ocurrio un error en la bd";
+                    responseApi.statusCode = 400;
+                    Console.WriteLine(ex.InnerException?.Message);
                 }
 
 
@@ -169,6 +181,56 @@ namespace LamaApp.Server.Controllers
             }
 
             return Ok(responseApi);
+        }
+
+
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> verifLogin([FromBody] LoginRequest loginRequest)
+        {
+            var responseApi = new ResponseApi<bool>();
+
+            try
+            {
+                var usuario = await _dbContext.Usuario.FirstOrDefaultAsync(u => u.NombreUsuario == loginRequest.NombreUsuario);
+
+                if (usuario == null)
+                {
+                    responseApi.response = false; // Usuario no encontrado
+                    responseApi.mensaje = "Usuario no encontrado.";
+                    responseApi.statusCode = 404;
+                    return NotFound(responseApi);
+                }
+
+                var passwordHasher = new PasswordHasher<Usuario>();
+                var resultado = passwordHasher.VerifyHashedPassword(usuario, usuario.Contraseña, loginRequest.PlainPassword);
+
+                if (resultado == PasswordVerificationResult.Success)
+                {
+                    responseApi.response = true;
+                    responseApi.statusCode = 200;
+                }
+                else
+                {
+                    responseApi.response = false;
+                    responseApi.mensaje = "Contraseña incorrecta.";
+                    responseApi.statusCode = 400;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseApi.response = false;
+                responseApi.mensaje = ex.Message;
+                responseApi.statusCode = 500;
+            }
+
+            return Ok(responseApi);
+        }
+
+        public class LoginRequest
+        {
+            public string NombreUsuario { get; set; } = string.Empty;
+            public string PlainPassword { get; set; } = string.Empty;
         }
 
 
@@ -217,13 +279,13 @@ namespace LamaApp.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUsuario(int id)
         {
-            var usuario = await _dbContext.Usuarios.FindAsync(id);
+            var usuario = await _dbContext.Usuario.FindAsync(id);
             if (usuario == null)
             {
                 return NotFound();
             }
 
-            _dbContext.Usuarios.Remove(usuario);
+            _dbContext.Usuario.Remove(usuario);
             await _dbContext.SaveChangesAsync();
 
             return NoContent();
@@ -231,7 +293,7 @@ namespace LamaApp.Server.Controllers
 
         private bool UsuarioExists(int id)
         {
-            return _dbContext.Usuarios.Any(e => e.IdUsuario == id);
+            return _dbContext.Usuario.Any(e => e.IdUsuario == id);
         }
 
     }

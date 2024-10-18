@@ -30,7 +30,7 @@ namespace LamaApp.Server.Controllers
 
             try
             {
-                foreach (var item in await _dbContext.Capitulos.ToListAsync())
+                foreach (var item in await _dbContext.Capitulo.ToListAsync())
                 {
                     listaCaps.Add(new CapituloSh
                     {
@@ -62,7 +62,7 @@ namespace LamaApp.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Capitulo>> GetCapitulo(int id)
         {
-            var capitulo = await _dbContext.Capitulos.FindAsync(id);
+            var capitulo = await _dbContext.Capitulo.FindAsync(id);
 
             if (capitulo == null)
             {

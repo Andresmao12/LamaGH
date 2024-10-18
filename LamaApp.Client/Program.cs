@@ -1,6 +1,6 @@
 using LamaApp.Client;
-using LamaApp.Client.Services;
 using LamaApp.Client.Services.Capitulos;
+using LamaApp.Client.Services.Usuario;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
