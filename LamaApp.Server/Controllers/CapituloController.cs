@@ -72,6 +72,80 @@ namespace LamaApp.Server.Controllers
             return capitulo;
         }
 
+        // POST: api/Capitulo/add
+        [HttpPost("add")]
+        public async Task<IActionResult> PostCapitulo(CapituloSh capitulo)
+        {
+            var responseApi = new ResponseApi<CapituloSh>();
+
+            try
+            {
+                if (string.IsNullOrEmpty(capitulo.Nombre) || string.IsNullOrEmpty(capitulo.Pais) || string.IsNullOrEmpty(capitulo.Ciudad))
+                {
+                    responseApi.mensaje = "Todos los campos obligatorios deben estar completos.";
+                    responseApi.statusCode = 400;
+                    return BadRequest(responseApi);
+                }
+
+                var nuevoCapitulo = new Capitulo
+                {
+                    Nombre = capitulo.Nombre,
+                    Pais = capitulo.Pais,
+                    Ciudad = capitulo.Ciudad
+                };
+
+                _dbContext.Capitulo.Add(nuevoCapitulo);
+                await _dbContext.SaveChangesAsync();
+
+                responseApi.response = capitulo;
+                responseApi.statusCode = 200;
+            }
+            catch (Exception ex)
+            {
+                responseApi.mensaje = ex.Message;
+                responseApi.statusCode = 400;
+            }
+
+            return Ok(responseApi);
+        }
+
+
+
+        [HttpDelete]
+        [Route("deleteCap")]
+        public async Task<ActionResult<ResponseApi<bool>>> deleteCapitulo(int idCapitulo)
+        {
+            var responseApi = new ResponseApi<bool>();
+
+            try
+            {
+                var capitulo = await _dbContext.Capitulo.FindAsync(idCapitulo);
+                if (capitulo == null)
+                {
+                    responseApi.statusCode = 404;
+                    responseApi.mensaje = "Capítulo no encontrado.";
+                    return NotFound(responseApi);
+                }
+
+                //Eliminamos el capitulo
+                _dbContext.Capitulo.Remove(capitulo);
+                await _dbContext.SaveChangesAsync();
+
+
+                responseApi.statusCode = 200;
+                responseApi.mensaje = "Capítulo eliminado correctamente.";
+
+                return Ok(responseApi);
+            }
+            catch (Exception ex)
+            {
+                responseApi.statusCode = 500;
+                responseApi.mensaje = $"Ocurrió un error: {ex.Message}";
+                return StatusCode(500, responseApi);
+            }
+        }
+
+
         /*
         [HttpPost]
         [Route("add")]

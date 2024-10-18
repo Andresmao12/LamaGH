@@ -1,5 +1,7 @@
 ﻿using LamaApp.Shared;
+using System.Net.Http;
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
 
 namespace LamaApp.Client.Services.Usuario
 {
@@ -85,5 +87,8 @@ namespace LamaApp.Client.Services.Usuario
         }
 
 
+
+
     }
+
 }

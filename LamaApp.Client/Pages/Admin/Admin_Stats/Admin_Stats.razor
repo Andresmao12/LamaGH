@@ -3,11 +3,13 @@
 @using LamaApp.Client.Pages.Admin.Layout
 @using LamaApp.Shared
 @using LamaApp.Client.Services.Capitulos
+@using LamaApp.Client.Services.Admin
 @using LamaApp.Client.Services.Usuario;
 @layout AdminLayout
 
 @inject HttpClient httpClient
 @inject ICapituloService capituloService
+@inject IAdminService adminloService
 
 
 <div class="flex-grow-1 p-4">
@@ -19,7 +21,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Total Miembros</h5>
-                    <p class="card-text display-4">@totalMembers</p>
+                    <p class="card-text display-4">@estadisticas.TotalUsuarios</p>
                 </div>
             </div>
         </div>
@@ -27,7 +29,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Total Capítulos</h5>
-                    <p class="card-text display-4">@capitulos.Count</p>
+                    <p class="card-text display-4">@estadisticas.TotalCapitulos</p>
                 </div>
             </div>
         </div>
@@ -53,7 +55,12 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Capítulos con Más Eventos</h5>
-                    <div id="chaptersEventsChart" style="height: 300px;"></div>
+                    <div id="chaptersEventsChart" style="height: 300px;">
+
+                        @* Añadir mas contenido o cambiar por alguna grafica *@
+                        @estadisticas.CapituloConMasUsuarios
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -61,7 +68,12 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Capítulos con Más Miembros</h5>
-                    <div id="chaptersMembersChart" style="height: 300px;"></div>
+                    <div id="chaptersMembersChart" style="height: 300px;">
+
+                        @* Añadir mas contenido o cambiar por alguna grafica *@
+                        @estadisticas.CapituloConMasUsuarios
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -99,20 +111,28 @@
 
 @code {
 
-    private List<CapituloSh> capitulos = new List<CapituloSh>();
+    private Estadisticas estadisticas = new Estadisticas();
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            capitulos = await capituloService.GetCapitulos();
-            string jsonCapitulos = JsonSerializer.Serialize(capitulos, new JsonSerializerOptions { WriteIndented = true });
+
+            estadisticas = await adminloService.getStats();
+
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error al obtener capítulos: {ex.Message}");
         }
     }
+
+
+    // Obtenemos estadisticas
+
+
+
+
 
     private List<RecentActivity> recentActivities = new List<RecentActivity>
     {
@@ -123,7 +143,6 @@
         new RecentActivity { Date = DateTime.Now.AddDays(-5), Chapter = "LAMA Bilbao", Description = "Actualización de información del capítulo" }
     };
 
-    private int totalMembers => 5532;
     private int totalEvents => 245;
     private int eventsThisMonth = 15; 
    

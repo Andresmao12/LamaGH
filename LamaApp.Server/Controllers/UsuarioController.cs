@@ -5,6 +5,7 @@ using LamaApp.Server.Models;
 using LamaApp.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using System.Numerics;
 
 namespace LamaApp.Server.Controllers
 {
@@ -295,6 +296,8 @@ namespace LamaApp.Server.Controllers
         {
             return _dbContext.Usuario.Any(e => e.IdUsuario == id);
         }
+
+       
 
     }
 }

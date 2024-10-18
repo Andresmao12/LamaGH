@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 
 namespace LamaApp.Client.Services.Capitulos
 {
-    public class CapituloService:ICapituloService
+    public class CapituloService : ICapituloService
     {
 
         private readonly HttpClient _httpClient;
@@ -36,5 +36,37 @@ namespace LamaApp.Client.Services.Capitulos
                 throw new Exception(response.mensaje);
             }
         }
+
+
+        public async Task<CapituloSh> AddCapitulo(CapituloSh nuevoCapitulo)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/Capitulo/add", nuevoCapitulo);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<CapituloSh>();
+            }
+            else
+            {
+                throw new Exception("Error al agregar el capítulo.");
+            }
+        }
+
+
+        public async Task<ResponseApi<bool>> deleteCapitulo(int idCapitulo)
+        {
+            var result = await _httpClient.DeleteAsync($"api/Capitulo/deleteCap?idCapitulo={idCapitulo}");
+            if (result.IsSuccessStatusCode)
+            {
+                var response = await result.Content.ReadFromJsonAsync<ResponseApi<bool>>();
+                return response;
+            }
+            else
+            {
+                throw new Exception("Error al eliminar el capítulo.");
+            }
+        }
+
+
     }
 }
