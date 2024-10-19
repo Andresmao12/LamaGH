@@ -67,6 +67,18 @@ namespace LamaApp.Client.Services.Capitulos
             }
         }
 
+        public async Task<CapituloSh> UpdateCapitulo(CapituloSh capitulo) {
+            var response = await _httpClient.PutAsJsonAsync($"/api/Capitulo/{capitulo.IdCapitulo}",capitulo);
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<CapituloSh>();
+            }
+            else
+            {
+                throw new Exception("Error al agregar el capítulo.");
+            }
+
+        }
 
     }
 }

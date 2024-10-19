@@ -8,6 +8,7 @@ namespace LamaApp.Client.Services.Capitulos
         Task<List<CapituloSh>> GetCapitulos();
         Task<CapituloSh> GetCapitulo(int id);
         Task<CapituloSh> AddCapitulo(CapituloSh capitulo);
+        Task<CapituloSh> UpdateCapitulo(CapituloSh capitulo);
         Task<ResponseApi<bool>> deleteCapitulo(int idCapitulo);
 
     }

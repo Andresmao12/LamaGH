@@ -140,13 +140,14 @@
 
     }
 
-    private async void handleModalSubmit()
+    private async Task handleModalSubmit()
     {
         if (currentEvent == 1)
         {
             try
             {
                 await capituloService.AddCapitulo(currentCap);
+                capitulos = await capituloService.GetCapitulos();
                 CloseEventModal();
 
             }catch(Exception ex)
@@ -158,7 +159,8 @@
         {
             try
             {
-                //Actualizar capitulo editado
+                await capituloService.UpdateCapitulo(currentCap);
+                CloseEventModal();
             }
             catch (Exception ex)
             {
@@ -179,23 +181,19 @@
 
     }
 
-    private async void DeleteCap(int id)
+    private async Task DeleteCap(int id)
     {
 
         //Se podria preguntar si esta seguro de eliminar
 
         //Eliminamos el capitulo
         var deleteCap = await capituloService.deleteCapitulo(id);
-
+        
         if (deleteCap.statusCode == 200)
         {
+            capitulos.RemoveAll(e => e.IdCapitulo == id);
             // Mostrar confirmacion
         }
-
-        //Actualizamos los capitulos
-        capitulos = await capituloService.GetCapitulos();
-
-        //SE ESTAN ELIMINANDO Y AGREGANDO CORRECTAMENTE PERO NO SE ACTUALIZA, TOCA REINICIAR LA PAGINA
 
     }
 

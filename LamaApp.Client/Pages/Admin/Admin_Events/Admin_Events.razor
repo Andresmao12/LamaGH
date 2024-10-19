@@ -1,10 +1,15 @@
 ﻿@page "/admin/events"
 @using System.Text.Json;
 @using LamaApp.Client.Pages.Admin.Layout
+@using LamaApp.Client.Services.Capitulos
+@using LamaApp.Client.Services.Evento
 @using LamaApp.Shared
 @layout AdminLayout
 
 @inject HttpClient httpClient
+@inject ICapituloService capituloService
+@inject IEventoService eventoService
+
 
 <div class="flex-grow-1 p-4">
     <h2 class="h2 mb-4">Gestión de Eventos</h2>
@@ -14,7 +19,7 @@
         <div class="w-25">
             <input type="text" class="form-control" placeholder="Buscar evento...">
         </div>
-        <button class="btn btn-primary" @onclick="OpenAddEventModal">
+        <button class="btn btn-primary" @onclick="()=> OpenAddEventModal(1, null)">
             <i class="bi bi-plus-circle me-2"></i> Agregar Evento
         </button>
     </div>
@@ -25,8 +30,10 @@
             <tr>
                 <th>ID</th>
                 <th>Título</th>
-                <th>Fecha</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
                 <th>Ubicación</th>
+                <th>Capitulo</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -34,15 +41,17 @@
             @foreach (var evt in events)
             {
                 <tr>
-                    <td>@evt.Id</td>
-                    <td>@evt.Title</td>
-                    <td>@evt.Date.ToShortDateString()</td>
-                    <td>@evt.Location</td>
+                    <td>@evt.IdEvento</td>
+                    <td>@evt.Descripcion</td>
+                    <td>@evt.FechaInicio.ToShortDateString()</td>
+                    <td>@evt.FechaFin.ToShortDateString()</td>
+                    <td>@evt.Ubicacion</td>
+                    <td>@evt.IdCapitulo</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-secondary me-2" @onclick="() => OpenEditEventModal(evt)">
+                        <button class="btn btn-sm btn-outline-secondary me-2" @onclick="() => OpenAddEventModal(2,evt)">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
-                        <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteEvent(evt.Id)">
+                        <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteEvent(evt.IdEvento)">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </td>
@@ -65,15 +74,40 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="eventTitle" class="form-label">Título</label>
-                        <input type="text" class="form-control" id="eventTitle" @bind="currentEvent.Title">
+                        <input type="text" class="form-control" id="eventTitle" @bind="currentEvent.Descripcion">
                     </div>
                     <div class="mb-3">
-                        <label for="eventDate" class="form-label">Fecha</label>
-                        <input type="date" class="form-control" id="eventDate" @bind="currentEvent.Date">
+                        <label for="eventDate" class="form-label">Fecha Inicio</label>
+                        <input type="date" class="form-control" id="eventDate" @bind="currentEvent.FechaFin">
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventDateFinish" class="form-label">Fecha Fin</label>
+                        <input type="date" class="form-control" id="eventDateFinish" @bind="currentEvent.FechaFin">
                     </div>
                     <div class="mb-3">
                         <label for="eventLocation" class="form-label">Ubicación</label>
-                        <input type="text" class="form-control" id="eventLocation" @bind="currentEvent.Location">
+                        <input type="text" class="form-control" id="eventLocation" @bind="currentEvent.Ubicacion">
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventCreator" class="form-label">Creador</label>
+                        <input type="text" class="form-control" id="eventCreator" @bind="currentEvent.Creador">
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventCapitulo" class="form-label">Capítulo</label>
+                        <select class="form-control" id="eventCapitulo" @bind="currentEvent.IdCapitulo">
+                            <option value="">Seleccione un capítulo</option>
+                            @if (capitulos != null && capitulos.Count > 0)
+                            {
+                                @foreach (var capitulo in capitulos)
+                                {
+                                    <option value="@capitulo.IdCapitulo">@capitulo.Nombre</option>
+                                }
+                            }
+                            else
+                            {
+                                <option disabled>Cargando capítulos...</option>
+                            }
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -87,70 +121,96 @@
 }
 
 @code {
-    private List<Event> events = new List<Event>
-    {
-        new Event { Id = 1, Title = "Lanzamiento LAMA 2.0", Date = DateTime.Now.AddDays(30), Location = "Centro de Convenciones" },
-        new Event { Id = 2, Title = "Taller de LAMA para principiantes", Date = DateTime.Now.AddDays(15), Location = "Aula Virtual" },
-        new Event { Id = 3, Title = "Conferencia LAMA Experts", Date = DateTime.Now.AddDays(60), Location = "Hotel Metropol" }
-    };
+    private List<EventoSh> events = new List<EventoSh>();
 
     private bool showEventModal = false;
-    private Event currentEvent = new Event();
-    private Event editingEvent = null;
+    private int option = 0;
+    private EventoSh currentEvent = new EventoSh();
+    private EventoSh editingEvent = null;
+    private List<CapituloSh> capitulos = new List<CapituloSh>();
 
-    private void OpenAddEventModal()
+    protected override async Task OnInitializedAsync()
     {
-        currentEvent = new Event();
-        editingEvent = null;
-        showEventModal = true;
+        try
+        {
+            capitulos = await capituloService.GetCapitulos();
+            events = await eventoService.GetEventos();
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al obtener capítulos: {ex.Message}");
+        }
     }
 
-    private void OpenEditEventModal(Event evt)
+
+    private void OpenAddEventModal(int option, EventoSh? evt)
     {
-        currentEvent = new Event
-            {
-                Id = evt.Id,
-                Title = evt.Title,
-                Date = evt.Date,
-                Location = evt.Location
-            };
-        editingEvent = evt;
         showEventModal = true;
+        this.option = option;
+
+        if (option == 1)
+        {
+            currentEvent = new EventoSh();
+        }
+        else
+        {
+            currentEvent = evt;
+        }
+
     }
+
 
     private void CloseEventModal()
     {
         showEventModal = false;
     }
 
-    private void SaveEvent()
+    private async Task SaveEvent()
     {
-        if (editingEvent == null)
+        if (option == 1)
         {
-            // Add new event
-            currentEvent.Id = events.Max(e => e.Id) + 1;
-            events.Add(currentEvent);
+            try
+            {
+                await eventoService.AddEvento(currentEvent);
+                events = await eventoService.GetEventos();
+                CloseEventModal();
+
+            }
+            catch (Exception ex)
+            {
+                // Mostrar modal o alert de error
+            }
+
         }
-        else
+        else if (option == 2)
         {
-            // Update existing event
-            var index = events.FindIndex(e => e.Id == editingEvent.Id);
-            events[index] = currentEvent;
+            try
+            {
+                //await capituloService.UpdateCapitulo(currentCap);
+                CloseEventModal();
+            }
+            catch (Exception ex)
+            {
+
+            }
+
         }
-        CloseEventModal();
     }
 
     private void DeleteEvent(int id)
     {
-        events.RemoveAll(e => e.Id == id);
+        events.RemoveAll(e => e.IdEvento == id);
     }
 
-    private class Event
+    /*private class Event
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime DateStart { get; set; }
+        public DateTime DateEnd { get; set; }
         public string Location { get; set; }
-    }
+        public int? CapituloId { get; set; }
+    }*/
 }
 

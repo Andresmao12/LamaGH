@@ -23,7 +23,9 @@ public partial class Evento
 
     public int IdCapitulo { get; set; }
 
-    public virtual Capitulo Capitulo { get; set; } = null!;
+    //public virtual Capitulo Capitulo { get; set; } = null!;
 
+    [ForeignKey("IdCapitulo")]
+    public virtual Capitulo? Capitulo { get; set; }
     public virtual ICollection<Inscripcion> Inscripciones { get; set; } = new List<Inscripcion>();
 }

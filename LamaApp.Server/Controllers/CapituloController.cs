@@ -76,7 +76,7 @@ namespace LamaApp.Server.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> PostCapitulo(CapituloSh capitulo)
         {
-            var responseApi = new ResponseApi<CapituloSh>();
+            var responseApi = new ResponseApi<Capitulo>();
 
             try
             {
@@ -97,7 +97,7 @@ namespace LamaApp.Server.Controllers
                 _dbContext.Capitulo.Add(nuevoCapitulo);
                 await _dbContext.SaveChangesAsync();
 
-                responseApi.response = capitulo;
+                responseApi.response = nuevoCapitulo;
                 responseApi.statusCode = 200;
             }
             catch (Exception ex)
@@ -145,124 +145,47 @@ namespace LamaApp.Server.Controllers
             }
         }
 
-
-        /*
-        [HttpPost]
-        [Route("add")]
-        public async Task<IActionResult> PostUsuario(UsuarioSh usuario)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCapitulo(CapituloSh capitulo)
         {
-            var responseApi = new ResponseApi<int>();
+            var responseApi = new ResponseApi<Capitulo>();
 
             try
             {
-
-                if (string.IsNullOrEmpty(usuario.NombreUsuario) || string.IsNullOrEmpty(usuario.Contraseña) ||
-                   string.IsNullOrEmpty(usuario.Nombre) || string.IsNullOrEmpty(usuario.Apellido) ||
-                   string.IsNullOrEmpty(usuario.Cedula) || usuario.FechaNacimiento == default)
+                if (string.IsNullOrEmpty(capitulo.Nombre) || string.IsNullOrEmpty(capitulo.Pais) || string.IsNullOrEmpty(capitulo.Ciudad))
                 {
                     responseApi.mensaje = "Todos los campos obligatorios deben estar completos.";
                     responseApi.statusCode = 400;
                     return BadRequest(responseApi);
                 }
 
+                var capituloExistente = await _dbContext.Capitulo.FindAsync(capitulo.IdCapitulo);
 
-                var dbUsuario = new Usuario
+                if (capituloExistente == null)
                 {
-                    NombreUsuario = usuario.NombreUsuario,
-                    Contraseña = usuario.Contraseña,
-                    Nombre = usuario.Nombre,
-                    Apellido = usuario.Apellido,
-                    Cedula = usuario.Cedula,
-                    FechaNacimiento = usuario.FechaNacimiento,
-                    FechaRegistro = DateTime.Now,
-
-                    // Mapeo de Contacto
-                    Contacto = new Contacto
-                    {
-                        Direccion = usuario.Contacto.Direccion,
-                        Celular = usuario.Contacto.Celular,
-                        Correo = usuario.Contacto.Correo,
-                    },
-
-                    // Mapeo de Pareja
-                    Pareja = new Pareja
-                    {
-                        Nombre = usuario.Pareja.Nombre,
-                        Cedula = usuario.Pareja.Cedula,
-                    },
-
-                    // Mapeo de Motocicleta
-                    Motocicleta = new Motocicleta
-                    {
-                        Marca = usuario.Motocicleta.Marca,
-                        Modelo = usuario.Motocicleta.Modelo,
-                        Placa = usuario.Motocicleta.Placa,
-                        Cilindrada = usuario.Motocicleta.Cilindrada,
-                    },
-
-                    // Id del capítulo
-                    IdCapitulo = usuario.IdCapitulo
-                };
-
-                _dbContext.Add(dbUsuario);
-                //await _dbContext.SaveChangesAsync();
-
-
-                try
-                {
-                    // Intento de guardar cambios
-                    await _dbContext.SaveChangesAsync();
-                }
-                catch (DbUpdateException ex)
-                {
-                    var innerException = ex.InnerException;
-                    Console.WriteLine(innerException?.Message);
+                    // Si no se encuentra el capítulo, devolver un error
+                    responseApi.mensaje = $"No se encontró el capítulo con ID {capitulo.IdCapitulo}.";
+                    responseApi.statusCode = 404;
+                    return NotFound(responseApi);
                 }
 
+                
+                capituloExistente.Nombre = capitulo.Nombre;
+                capituloExistente.Pais = capitulo.Pais;
+                capituloExistente.Ciudad = capitulo.Ciudad;
 
-                if (dbUsuario.IdUsuario != null)
-                {
-                    responseApi.response = dbUsuario.IdUsuario;
-                    responseApi.statusCode = 200;
-                }
-                else
-                {
-                    responseApi.mensaje = "Ocurrio un error guardando el usuario";
-                    responseApi.statusCode = 400;
-                }
+                await _dbContext.SaveChangesAsync();
+
+                responseApi.response = capituloExistente;
+                responseApi.statusCode = 200;
+
+                return Ok(responseApi);
             }
-            catch (Exception ex)
-            {
-
+            catch (Exception ex) { 
+                responseApi.statusCode=500;
                 responseApi.mensaje = ex.Message;
-                responseApi.statusCode = 400;
-
+                return StatusCode(500, responseApi);
             }
-
-            return Ok(responseApi);
         }
-        */
-        /*
-        // DELETE: api/Usuario/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUsuario(int id)
-        {
-            var usuario = await _dbContext.Usuarios.FindAsync(id);
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-
-            _dbContext.Usuarios.Remove(usuario);
-            await _dbContext.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool UsuarioExists(int id)
-        {
-            return _dbContext.Usuarios.Any(e => e.IdUsuario == id);
-        }
-        */
     }
 }
