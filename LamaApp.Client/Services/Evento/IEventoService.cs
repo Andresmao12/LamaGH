@@ -6,7 +6,8 @@ namespace LamaApp.Client.Services.Evento
     {
         Task<List<EventoSh>> GetEventos();
         Task<EventoSh> AddEvento(EventoSh evento);
-
+        Task<EventoSh> UpdateEvento(EventoSh evento);
+        Task<ResponseApi<bool>> deleteEvento(int idEvento);
 
     }
 }

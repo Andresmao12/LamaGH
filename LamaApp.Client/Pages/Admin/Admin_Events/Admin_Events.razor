@@ -188,6 +188,8 @@
             try
             {
                 //await capituloService.UpdateCapitulo(currentCap);
+                await eventoService.UpdateEvento(currentEvent);
+                events = await eventoService.GetEventos();
                 CloseEventModal();
             }
             catch (Exception ex)
@@ -198,19 +200,16 @@
         }
     }
 
-    private void DeleteEvent(int id)
+    private async Task DeleteEvent(int id)
     {
-        events.RemoveAll(e => e.IdEvento == id);
-    }
 
-    /*private class Event
-    {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public DateTime DateStart { get; set; }
-        public DateTime DateEnd { get; set; }
-        public string Location { get; set; }
-        public int? CapituloId { get; set; }
-    }*/
+        var deleteEvent = await eventoService.deleteEvento(id);
+
+        if (deleteEvent.statusCode == 200)
+        {
+            events.RemoveAll(e => e.IdEvento == id);
+            
+        }
+    }
 }
 

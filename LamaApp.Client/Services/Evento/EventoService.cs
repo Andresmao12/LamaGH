@@ -37,5 +37,33 @@ namespace LamaApp.Client.Services.Evento
                 throw new Exception("Error al agregar el capítulo.");
             }
         }
+
+        public async Task<ResponseApi<bool>> deleteEvento(int idEvento)
+        {
+            var result = await _httpClient.DeleteAsync($"api/Evento/delete?idEvento={idEvento}");
+            if (result.IsSuccessStatusCode)
+            {
+                var response = await result.Content.ReadFromJsonAsync<ResponseApi<bool>>();
+                return response;
+            }
+            else
+            {
+                throw new Exception("Error al eliminar el capítulo.");
+            }
+        }
+
+        public async Task<EventoSh> UpdateEvento(EventoSh evento)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"/api/Evento/{evento.IdEvento}", evento);
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<EventoSh>();
+            }
+            else
+            {
+                throw new Exception("Error al agregar el capítulo.");
+            }
+
+        }
     }
 }
