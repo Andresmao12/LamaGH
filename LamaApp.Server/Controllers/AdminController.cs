@@ -51,6 +51,9 @@ namespace LamaApp.Server.Controllers
                     .Select(e => e.Nombre)
                     .FirstOrDefaultAsync();
 
+
+                //DATOS PARA LAS GRAFICAS
+
                 // Usuarios por capítulo, generando un string
                 var usuariosPorCapitulo = await _dbContext.Capitulo
                     .Select(c => new
@@ -65,16 +68,6 @@ namespace LamaApp.Server.Controllers
                 var usuariosPorCapituloStrings = usuariosPorCapitulo
                     .Select(c => $"{c.NombreCapitulo},{c.TotalUsuarios}")
                     .ToList();
-
-
-
-
-                //En que lugar se realizan mas eventos
-                var lugarConMasEventos = await _dbContext.Evento
-                    .GroupBy(e => e.Ubicacion)
-                    .OrderByDescending(g => g.Count())
-                    .Select(g => new { Ubicacion = g.Key, NumeroEventos = g.Count() })
-                    .FirstOrDefaultAsync();
 
 
                 var eventosPorCapitulo = await _dbContext.Evento
@@ -93,7 +86,42 @@ namespace LamaApp.Server.Controllers
                     .ToList();
 
 
+                // Total de eventos
+                var totalEventos = await _dbContext.Evento.CountAsync();
 
+                // Eventos este mes
+                var eventosEsteMes = await _dbContext.Evento
+                    .Where(e => e.FechaInicio.Date.Month == DateTime.Now.Month && e.FechaInicio.Date.Year == DateTime.Now.Year)
+                    .CountAsync();
+
+
+
+
+                var fechaLimite = DateTime.Now.AddDays(30); // Hasta 30 días despues
+
+                // Consultar eventos en los próximos 30 días
+                var eventosProximos = await _dbContext.Evento
+                    .Where(e => e.FechaInicio >= DateTime.Today && e.FechaInicio <= fechaLimite)
+                    .Select(e => new
+                    {
+                        e.FechaInicio,
+                        e.Descripcion,
+                        Capitulo = e.Capitulo.Nombre,
+                        e.Creador
+                    })
+                    .ToListAsync();
+
+                // Actividad reciente
+                var actividadReciente = eventosProximos
+                    .Select(e => $"{e.FechaInicio}; {e.Descripcion}; {e.Capitulo}; {e.Creador}")
+                    .ToList();
+
+                // Debugg
+                Console.WriteLine("Actividad reciente:");
+                foreach (var actividad in actividadReciente)
+                {
+                    Console.WriteLine(actividad);
+                }
 
                 responseApi.response = new Estadisticas
                 {
@@ -101,9 +129,13 @@ namespace LamaApp.Server.Controllers
                     TotalCapitulos = totalCapitulos,
                     listaCapitulos = listaCapitulos,
                     CapituloConMasUsuarios = capituloConMasUsuarios,
-                    usuariosPorCapitulo = usuariosPorCapituloStrings, // Lista<string> en formato "Nombre,Total"
-                    eventosPorCapitulo = eventosPorCapituloStrings, // Lista<string> en formato "Nombre,Total"
+                    usuariosPorCapitulo = usuariosPorCapituloStrings,
+                    eventosPorCapitulo = eventosPorCapituloStrings,
+                    TotalEventos = totalEventos,
+                    EventosEsteMes = eventosEsteMes,
+                    ActividadReciente = actividadReciente
                 };
+
 
                 responseApi.statusCode = 200;
 

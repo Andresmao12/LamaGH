@@ -14,12 +14,13 @@ namespace LamaApp.Shared
 
         public List<CapituloSh> listaCapitulos  { get; set;}
         public string CapituloConMasUsuarios { get; set; }
-        public string LugarConMasEventos { get; set; }
 
-
+        public int TotalEventos { get; set; }
+        public int EventosEsteMes { get; set; }
 
         public List<string> usuariosPorCapitulo { get; set; }
         public List<string> eventosPorCapitulo { get; set; }
+        public List<string> ActividadReciente { get; set; }
 
 
 

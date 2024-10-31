@@ -38,7 +38,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Total Eventos</h5>
-                    <p class="card-text display-4">@totalEvents</p>
+                    <p class="card-text display-4">@estadisticas.TotalEventos</p>
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Eventos Este Mes</h5>
-                    <p class="card-text display-4">@eventsThisMonth</p>
+                    <p class="card-text display-4">@estadisticas.EventosEsteMes</p>
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
                     <h5 class="card-title">Capítulos con Más Eventos</h5>
                     <div id="chaptersEventsChart" style="height: 300px;">
 
-                        @* Añadir mas contenido o cambiar por alguna grafica *@
+                        @* Grafica *@
                         <canvas id="myChart"></canvas>
 
                     </div>
@@ -71,7 +71,7 @@
                     <h5 class="card-title">Capítulos con Más Miembros</h5>
                     <div id="chaptersMembersChart" style="height: 300px;">
 
-                        @* Añadir mas contenido o cambiar por alguna grafica *@
+                        @* Grafica *@
                             <canvas id="myChart2"></canvas>
                     </div>
                 </div>
@@ -82,22 +82,24 @@
         <div class="col-md-12 mb-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Actividad Reciente</h5>
+                    <h5 class="card-title">Proximos eventos</h5>
                     <table class="table">
                         <thead>
                             <tr>
                                 <th>Fecha</th>
-                                <th>Capítulo</th>
-                                <th>Actividad</th>
+                                <th>Capitulo</th>
+                                <th>Descripcion</th>
+                                <th>Creador</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var activity in recentActivities)
                             {
                                 <tr>
-                                    <td>@activity.Date.ToShortDateString()</td>
-                                    <td>@activity.Chapter</td>
-                                    <td>@activity.Description</td>
+                                    <td>@activity.fecha.ToString("g")</td>
+                                    <td>@activity.capitulo</td>
+                                    <td>@activity.descripcion</td>
+                                    <td>@activity.creador</td> 
                                 </tr>
                             }
                         </tbody>
@@ -112,6 +114,7 @@
 @code {
 
     private Estadisticas estadisticas = new Estadisticas();
+    private List<RecentActivity> recentActivities = new List<RecentActivity>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -133,8 +136,8 @@
                 totalesUsuarios.Add(int.Parse(partes[1])); 
             }
 
-            //Primera grafica
-            await JS.InvokeVoidAsync("Graficar", "myChart", totalesUsuarios.ToArray(), nombresCapitulosUsuarios.ToArray());
+            //Segunda grafica
+            await JS.InvokeVoidAsync("Graficar", "myChart2", totalesUsuarios.ToArray(), nombresCapitulosUsuarios.ToArray());
 
             // Separamos los datos en nombre de capitulo y total eventos
             var eventosPorCapitulo = estadisticas.eventosPorCapitulo;
@@ -148,10 +151,34 @@
                 totalesEventos.Add(int.Parse(partes[1])); 
             }
 
-            //Segunda grafica
-            await JS.InvokeVoidAsync("Graficar", "myChart2", totalesEventos.ToArray(), nombresCapitulosEventos.ToArray());
+            //Primera grafica
+            await JS.InvokeVoidAsync("Graficar", "myChart", totalesEventos.ToArray(), nombresCapitulosEventos.ToArray());
 
 
+
+            // Procesar `ActividadReciente` para llenar `recentActivities`
+            recentActivities = estadisticas.ActividadReciente
+                        .Select(activity =>
+             {
+                 var parts = activity.Split(';');
+                 return new RecentActivity
+                     {
+                         fecha = DateTime.Parse(parts[0].Trim()),
+                         descripcion = parts[1].Trim(),
+                         capitulo = parts[2].Trim(),
+                         creador = parts[3].Trim() 
+                     };
+             })
+             .ToList();
+
+
+            Console.WriteLine("Actividades Recientes:");
+            foreach (var activity in recentActivities)
+            {
+                Console.WriteLine($"Fecha: {activity.fecha}, Capítulo: {activity.capitulo}, Descripción: {activity.descripcion}, Creador: {activity.creador}");
+            }
+     
+        
         }
         catch (Exception ex)
         {
@@ -159,27 +186,12 @@
         }
     }
 
-
-   private List<RecentActivity> recentActivities = new List<RecentActivity>
-    {
-        new RecentActivity { Date = DateTime.Now.AddDays(-1), Chapter = "LAMA Madrid", Description = "Nuevo evento creado: 'Taller de Networking'" },
-        new RecentActivity { Date = DateTime.Now.AddDays(-2), Chapter = "LAMA Barcelona", Description = "5 nuevos miembros se unieron" },
-        new RecentActivity { Date = DateTime.Now.AddDays(-3), Chapter = "LAMA Valencia", Description = "Evento completado: 'Charla sobre Liderazgo'" },
-        new RecentActivity { Date = DateTime.Now.AddDays(-4), Chapter = "LAMA Sevilla", Description = "Nuevo capítulo creado" },
-        new RecentActivity { Date = DateTime.Now.AddDays(-5), Chapter = "LAMA Bilbao", Description = "Actualización de información del capítulo" }
-    };
-
-    private int totalEvents => 245;
-    private int eventsThisMonth = 15; 
-   
-
-
-
     private class RecentActivity
     {
-        public DateTime Date { get; set; }
-        public string Chapter { get; set; }
-        public string Description { get; set; }
+        public DateTime fecha { get; set; }
+        public string descripcion { get; set; }
+        public string capitulo { get; set; }
+        public string creador { get; set; }
     }
 }
 
