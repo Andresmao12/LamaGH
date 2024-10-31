@@ -1,7 +1,10 @@
 ﻿@page "/user/episodes"
 @using LamaApp.Client.Pages.Layout
 @using LamaApp.Client.Pages.Usuario.Layout
+@using LamaApp.Shared
 
+@using LamaApp.Client.Services.Capitulos
+@inject ICapituloService capituloService
 @layout UserLayout
 
 <div class="container m-0 p-4 d-flex flex-column gap-4 w-100 ">
@@ -10,57 +13,23 @@
 
     <div class="grid-cont d-grid grid-cols-3 gap-5 w-100">
 
-        <div class="target bg-white p-3 rounded d-flex flex-column gap-2">
-            <p class="fs-1 fw-bold">
-                Aventura en la montaña
-            </p>
-            <img src="Imagenes/montaña.jpg" class="w-100 rounded-3" />
-           <div class="desc">
-                <p class="fs-6 text-secondary">Duración <span>3 horas</span></p>
-                <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras rutrum sem sapien, nec commodo sem tempus ut. </p>
-           </div>
-           
-            <button class="btn btn-dark">Ver más detalles</button>
-        </div>
+        @foreach (var cap in listaEpisodios)
+        {
 
-        <div class="target bg-white p-3 rounded d-flex flex-column gap-2">
-            <p class="fs-1 fw-bold">
-                Aventura en la montaña
-            </p>
-            <img src="Imagenes/montaña.jpg" class="w-100 rounded-3" />
-            <div class="desc">
-                <p class="fs-6 text-secondary">Duración <span>3 horas</span></p>
-                <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras rutrum sem sapien, nec commodo sem tempus ut. </p>
+            <div class="target bg-white p-3 rounded d-flex flex-column gap-2">
+                <p class="fs-1 fw-bold">
+                    @cap.Nombre
+                </p>
+                <img src="Imagenes/montaña.jpg" class="w-100 rounded-3" />
+                <div class="desc">
+                    <p class="fs-6 text-secondary">@cap.Pais - @cap.Ciudad</p>
+                    <p>@cap.Descripcion</p>
+                </div>
+
+                <button class="btn btn-dark">Ver más detalles</button>
             </div>
+        }
 
-            <button class="btn btn-dark">Ver más detalles</button>
-        </div>
-
-        <div class="target bg-white p-3 rounded d-flex flex-column gap-2">
-            <p class="fs-1 fw-bold">
-                Aventura en la montaña
-            </p>
-            <img src="Imagenes/montaña.jpg" class="w-100 rounded-3" />
-            <div class="desc">
-                <p class="fs-6 text-secondary">Duración <span>3 horas</span></p>
-                <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras rutrum sem sapien, nec commodo sem tempus ut. </p>
-            </div>
-
-            <button class="btn btn-dark">Ver más detalles</button>
-        </div>
-
-        <div class="target bg-white p-3 rounded d-flex flex-column gap-2">
-            <p class="fs-1 fw-bold">
-                Aventura en la montaña
-            </p>
-            <img src="Imagenes/montaña.jpg" class="w-100 rounded-3" />
-            <div class="desc">
-                <p class="fs-6 text-secondary">Duración <span>3 horas</span></p>
-                <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras rutrum sem sapien, nec commodo sem tempus ut. </p>
-            </div>
-
-            <button class="btn btn-dark">Ver más detalles</button>
-        </div>
     </div>
 </div>
 
@@ -73,5 +42,21 @@
 
 </style>
 @code {
+
+    private List<CapituloSh> listaEpisodios = new List<CapituloSh>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+
+            listaEpisodios = await capituloService.GetCapitulos();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Error en la respuesta" + e);
+        }
+    }
+
 
 }

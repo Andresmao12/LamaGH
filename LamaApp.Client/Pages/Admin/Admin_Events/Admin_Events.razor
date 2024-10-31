@@ -42,7 +42,7 @@
             {
                 <tr>
                     <td>@evt.IdEvento</td>
-                    <td>@evt.Descripcion</td>
+                    <td>@evt.Titulo</td>
                     <td>@evt.FechaInicio.ToShortDateString()</td>
                     <td>@evt.FechaFin.ToShortDateString()</td>
                     <td>@evt.Ubicacion</td>
@@ -74,9 +74,13 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="eventTitle" class="form-label">Título</label>
-                        <input type="text" class="form-control" id="eventTitle" @bind="currentEvent.Descripcion">
+                        <input type="text" class="form-control" id="eventTitle" @bind="currentEvent.Titulo">
                     </div>
                     <div class="mb-3">
+                        <label for="eventDesc" class="form-label">Descripcion</label>
+                        <input type="text" class="form-control" id="eventDesc" @bind="currentEvent.Descripcion">
+                    </div>
+                    <div class="mb-3">  
                         <label for="eventDate" class="form-label">Fecha Inicio</label>
                         <input type="date" class="form-control" id="eventDate" @bind="currentEvent.FechaInicio">
                     </div>

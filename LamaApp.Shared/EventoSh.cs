@@ -3,6 +3,7 @@
     public class EventoSh
     {
         public int IdEvento { get; set; }
+        public string Titulo { get; set; } = null!;
 
         public DateTime FechaInicio { get; set; }
 

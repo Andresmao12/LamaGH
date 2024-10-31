@@ -1,6 +1,10 @@
 ﻿@page "/user/events"
 @using LamaApp.Client.Pages.Usuario.Layout
 @using LamaApp.Client.Pages.Usuario.User_Events.Components
+@using LamaApp.Shared
+@using LamaApp.Client.Services.Evento
+
+@inject IEventoService eventoService
 
 @layout UserLayout
 
@@ -12,16 +16,12 @@
 
     <div class="caps-container d-grid grid-cols-3">
 
-      <Target/>
-      <Target/>
-      <Target />
-      <Target />
-      <Target />
-      <Target />
-      <Target />
-      <Target />
-      <Target />
-    
+      @foreach (var evento in ListaEventos){
+        
+          <Target Titulo="@evento.Titulo" Descripcion="@evento.Descripcion" Ubicacion="@evento.Ubicacion" Fecha="@evento.FechaInicio.ToString("dd/MM/yyyy")" />
+
+        }
+
 
     </div>
 
@@ -38,5 +38,22 @@
 </style>
 
 @code {
+
+        private List<EventoSh> ListaEventos = new List<EventoSh>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+
+            ListaEventos = await eventoService.GetEventos();
+        
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Error en la respuesta" + e);
+        }
+    }
+
 
 }

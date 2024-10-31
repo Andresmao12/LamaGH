@@ -36,6 +36,7 @@ namespace LamaApp.Server.Controllers
                     {
                         IdCapitulo = item.IdCapitulo,
                         Nombre = item.Nombre,
+                        Descripcion = item.Descripcion,
                         Pais = item.Pais,
                         Ciudad = item.Ciudad,
                     });
@@ -90,6 +91,7 @@ namespace LamaApp.Server.Controllers
                 var nuevoCapitulo = new Capitulo
                 {
                     Nombre = capitulo.Nombre,
+                    Descripcion = capitulo.Descripcion,
                     Pais = capitulo.Pais,
                     Ciudad = capitulo.Ciudad
                 };
@@ -152,7 +154,7 @@ namespace LamaApp.Server.Controllers
 
             try
             {
-                if (string.IsNullOrEmpty(capitulo.Nombre) || string.IsNullOrEmpty(capitulo.Pais) || string.IsNullOrEmpty(capitulo.Ciudad))
+                if (string.IsNullOrEmpty(capitulo.Nombre) || string.IsNullOrEmpty(capitulo.Pais) || string.IsNullOrEmpty(capitulo.Ciudad) || string.IsNullOrEmpty(capitulo.Descripcion))
                 {
                     responseApi.mensaje = "Todos los campos obligatorios deben estar completos.";
                     responseApi.statusCode = 400;
@@ -171,6 +173,7 @@ namespace LamaApp.Server.Controllers
 
                 
                 capituloExistente.Nombre = capitulo.Nombre;
+                capituloExistente.Descripcion = capitulo.Descripcion;
                 capituloExistente.Pais = capitulo.Pais;
                 capituloExistente.Ciudad = capitulo.Ciudad;
 

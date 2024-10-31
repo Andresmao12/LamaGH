@@ -29,6 +29,7 @@ namespace LamaApp.Server.Controllers
                     listEvents.Add(new Evento
                     {
                         IdEvento = item.IdEvento,
+                        Titulo = item.Titulo,
                         FechaInicio = item.FechaInicio,
                         FechaFin = item.FechaFin,
                         Ubicacion = item.Ubicacion,
@@ -63,6 +64,7 @@ namespace LamaApp.Server.Controllers
             {
                 if (
                     string.IsNullOrEmpty(evento.FechaInicio.ToString()) || 
+                    string.IsNullOrEmpty(evento.Titulo) ||
                     string.IsNullOrEmpty(evento.FechaFin.ToString()) || 
                     string.IsNullOrEmpty(evento.Ubicacion) ||
                     string.IsNullOrEmpty(evento.Descripcion) ||
@@ -78,6 +80,7 @@ namespace LamaApp.Server.Controllers
                 {
                     FechaInicio = evento.FechaInicio,
                     FechaFin = evento.FechaFin,
+                    Titulo = evento.Titulo,
                     Ubicacion = evento.Ubicacion,
                     Creador = evento.Creador,
                     Descripcion = evento.Descripcion,
@@ -146,6 +149,7 @@ namespace LamaApp.Server.Controllers
                 if (
                     string.IsNullOrEmpty(evento.FechaInicio.ToString()) ||
                     string.IsNullOrEmpty(evento.FechaFin.ToString()) ||
+                    string.IsNullOrEmpty(evento.Titulo) ||
                     string.IsNullOrEmpty(evento.Ubicacion) ||
                     string.IsNullOrEmpty(evento.Descripcion) ||
                     string.IsNullOrEmpty(evento.IdCapitulo.ToString())
@@ -168,6 +172,7 @@ namespace LamaApp.Server.Controllers
 
                 eventoExistente.FechaInicio = evento.FechaInicio;
                 eventoExistente.FechaFin = evento.FechaFin;
+                eventoExistente.Titulo = evento.Titulo;
                 eventoExistente.Ubicacion = evento.Ubicacion;
                 eventoExistente.Creador = evento.Creador;
                 eventoExistente.Descripcion = evento.Descripcion;

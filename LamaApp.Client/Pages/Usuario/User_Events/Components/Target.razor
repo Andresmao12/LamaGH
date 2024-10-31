@@ -1,16 +1,13 @@
 ﻿<div class="card text-bg-dark">
-    
     <div class="card-img-overlay text-light">
         <div class="text-cont position-absolute z-1">
-            <h5 class="card-title">Evento</h5>
-            <p class="fs-6">12/04/2024 | Medellin</p>
-            <p class="card-text">El Chevrolet Camaro es un icónico automóvil deportivo estadounidense fabricado por Chevrolet. Su historia comenzó en 1966 cuando se lanzó como respuesta directa al Ford Mustang.</p>
-            <p class="card-text text-secondary"><small>Last updated 3 mins ago</small></p>
+            <h5 class="card-title">@Titulo</h5>
+            <p class="fs-6">@Fecha | @Ubicacion</p>
+            <p class="card-text">@Descripcion</p>
+            <p class="card-text text-secondary"><small>Recomendado para ti</small></p>
         </div>
-        
     </div>
 </div>
-
 <style>
 
     .text-cont{
@@ -43,5 +40,17 @@
 </style>
 
 @code {
+
+    [Parameter]
+    public string Titulo { get; set; }
+
+    [Parameter]
+    public string Fecha { get; set; }
+
+    [Parameter]
+    public string Ubicacion { get; set; }
+
+    [Parameter]
+    public string Descripcion { get; set; }
 
 }

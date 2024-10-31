@@ -10,6 +10,7 @@ public partial class Evento
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int IdEvento { get; set; }
+    public string Titulo { get; set; } = null!;
 
     public DateTime FechaInicio { get; set; }
 
