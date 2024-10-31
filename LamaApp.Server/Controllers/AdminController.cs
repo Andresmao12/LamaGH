@@ -51,6 +51,23 @@ namespace LamaApp.Server.Controllers
                     .Select(e => e.Nombre)
                     .FirstOrDefaultAsync();
 
+                // Usuarios por capítulo, generando un string
+                var usuariosPorCapitulo = await _dbContext.Capitulo
+                    .Select(c => new
+                    {
+                        NombreCapitulo = c.Nombre,
+                        TotalUsuarios = c.Usuarios.Count()
+                    })
+                    .OrderByDescending(c => c.TotalUsuarios) // Ordenar por total de usuarios
+                    .ToListAsync();
+
+                // Convertir a una lista de strings en el formato "Nombre,Total"
+                var usuariosPorCapituloStrings = usuariosPorCapitulo
+                    .Select(c => $"{c.NombreCapitulo},{c.TotalUsuarios}")
+                    .ToList();
+
+
+
 
                 //En que lugar se realizan mas eventos
                 var lugarConMasEventos = await _dbContext.Evento
@@ -60,14 +77,34 @@ namespace LamaApp.Server.Controllers
                     .FirstOrDefaultAsync();
 
 
+                var eventosPorCapitulo = await _dbContext.Evento
+                            .GroupBy(e => e.IdCapitulo) 
+                            .Select(g => new
+                            {
+                                NombreCapitulo = g.Select(e => e.Capitulo.Nombre).FirstOrDefault(), // Obtener el nombre del capítulo
+                                TotalEventos = g.Count()
+                            })
+                            .OrderByDescending(g => g.TotalEventos) // Ordenar por total de eventos
+                            .ToListAsync();
+
+                // Convertir a lista de strings para eventos
+                var eventosPorCapituloStrings = eventosPorCapitulo
+                    .Select(c => $"{c.NombreCapitulo},{c.TotalEventos}")
+                    .ToList();
+
+
+
 
                 responseApi.response = new Estadisticas
                 {
                     TotalUsuarios = totalUsuarios,
                     TotalCapitulos = totalCapitulos,
                     listaCapitulos = listaCapitulos,
-                    CapituloConMasUsuarios = capituloConMasUsuarios
+                    CapituloConMasUsuarios = capituloConMasUsuarios,
+                    usuariosPorCapitulo = usuariosPorCapituloStrings, // Lista<string> en formato "Nombre,Total"
+                    eventosPorCapitulo = eventosPorCapituloStrings, // Lista<string> en formato "Nombre,Total"
                 };
+
                 responseApi.statusCode = 200;
 
             }

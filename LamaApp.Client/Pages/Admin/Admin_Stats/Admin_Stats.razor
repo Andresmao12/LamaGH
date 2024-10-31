@@ -8,6 +8,7 @@
 @layout AdminLayout
 
 @inject HttpClient httpClient
+@inject IJSRuntime JS
 @inject ICapituloService capituloService
 @inject IAdminService adminloService
 
@@ -58,7 +59,7 @@
                     <div id="chaptersEventsChart" style="height: 300px;">
 
                         @* Añadir mas contenido o cambiar por alguna grafica *@
-                        @estadisticas.CapituloConMasUsuarios
+                        <canvas id="myChart"></canvas>
 
                     </div>
                 </div>
@@ -71,8 +72,7 @@
                     <div id="chaptersMembersChart" style="height: 300px;">
 
                         @* Añadir mas contenido o cambiar por alguna grafica *@
-                        @estadisticas.CapituloConMasUsuarios
-
+                            <canvas id="myChart2"></canvas>
                     </div>
                 </div>
             </div>
@@ -120,6 +120,38 @@
 
             estadisticas = await adminloService.getStats();
 
+
+            var usuariosPorCapitulo = estadisticas.usuariosPorCapitulo;
+            var nombresCapitulosUsuarios = new List<string>();
+            var totalesUsuarios = new List<int>();
+
+            //Separamos los datos en nombre de capitulo y total usuarios
+            foreach (var item in usuariosPorCapitulo)
+            {
+                var partes = item.Split(','); 
+                nombresCapitulosUsuarios.Add(partes[0]);
+                totalesUsuarios.Add(int.Parse(partes[1])); 
+            }
+
+            //Primera grafica
+            await JS.InvokeVoidAsync("Graficar", "myChart", totalesUsuarios.ToArray(), nombresCapitulosUsuarios.ToArray());
+
+            // Separamos los datos en nombre de capitulo y total eventos
+            var eventosPorCapitulo = estadisticas.eventosPorCapitulo;
+            var nombresCapitulosEventos = new List<string>();
+            var totalesEventos = new List<int>();
+
+            foreach (var item in eventosPorCapitulo)
+            {
+                var partes = item.Split(',');
+                nombresCapitulosEventos.Add(partes[0]); 
+                totalesEventos.Add(int.Parse(partes[1])); 
+            }
+
+            //Segunda grafica
+            await JS.InvokeVoidAsync("Graficar", "myChart2", totalesEventos.ToArray(), nombresCapitulosEventos.ToArray());
+
+
         }
         catch (Exception ex)
         {
@@ -128,13 +160,7 @@
     }
 
 
-    // Obtenemos estadisticas
-
-
-
-
-
-    private List<RecentActivity> recentActivities = new List<RecentActivity>
+   private List<RecentActivity> recentActivities = new List<RecentActivity>
     {
         new RecentActivity { Date = DateTime.Now.AddDays(-1), Chapter = "LAMA Madrid", Description = "Nuevo evento creado: 'Taller de Networking'" },
         new RecentActivity { Date = DateTime.Now.AddDays(-2), Chapter = "LAMA Barcelona", Description = "5 nuevos miembros se unieron" },

@@ -16,5 +16,15 @@ namespace LamaApp.Shared
         public string CapituloConMasUsuarios { get; set; }
         public string LugarConMasEventos { get; set; }
 
+
+
+        public List<string> usuariosPorCapitulo { get; set; }
+        public List<string> eventosPorCapitulo { get; set; }
+
+
+
+
+
+
     }
 }
