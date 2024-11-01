@@ -1,4 +1,16 @@
-﻿<div class="container p-2 m-0">
+﻿@using Microsoft.AspNetCore.Components.Forms;
+@using LamaApp.Client.Services.Usuario
+@using LamaApp.Shared;
+@using LamaApp.Client.Services.Usuario;
+@using LamaApp.Client.Services.Publicacion;
+
+@inject IUsuarioService usuarioService
+@inject IPublicacionService publicacionService
+@inject IJSRuntime js
+@inject HttpClient Http
+
+<EditForm FormName="formPublicacion" Model="@publicacion" OnValidSubmit="HandlePublicate" class="container p-2 m-0">
+    <DataAnnotationsValidator />
 
     <input type="text" name="name" class="form-control w-100 mb-3" placeholder="Buscar publicacion"/>
 
@@ -6,19 +18,36 @@
 
         <nav class="navbar gap-4 justify-content-start">
 
-            <button class="btn btn-dark">Mensaje</button>
-            <button class="btn">Multimedia</button>
-            <button class="btn">Evento</button>
+            <button class="btn @(modoPublicacion == 1 ? "btn-dark" : "")" @onclick="() => actualizarModo(1)">Mensaje</button>
+            <button class="btn @(modoPublicacion == 2 ? "btn-dark" : "")" @onclick="() => actualizarModo(2)">Multimedia</button>
+            <button class="btn @(modoPublicacion == 3 ? "btn-dark" : "")" @onclick="() => actualizarModo(3)">Evento</button>
           
         </nav>
 
-        <textarea class="text-area form-control form-control-lg border-primary rounded-3" rows="5" placeholder="Escribe lo que quieras..."></textarea>
+        <InputTextArea class="text-area form-control form-control-lg border-primary rounded-3" rows="5" placeholder="Escribe lo que quieras..." @bind-Value="publicacion.Contenido"></InputTextArea>
+        <ValidationMessage For="@(() => publicacion.Contenido)" />
 
-        <button class="btn btn-dark w-25 ">Publicar</button>
+        <button class="btn btn-dark w-25 " type="submit">Publicar</button>
 
     </div>
 
-</div>
+</EditForm>
+
+
+@if (formSubmitted)
+{
+    <div class="alert alert-success" role="alert">
+        ¡Publicación realizada con éxito!
+    </div>
+}
+
+@if (formError)
+{
+    <div class="alert alert-danger" role="alert">
+        @mensajeError
+    </div>
+}
+
 
 <style>
     .nav-item-active{
@@ -33,23 +62,83 @@
     }
 </style>
 
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const nav = document.querySelector(".navbar");
-
-        nav.addEventListener("click", (e) => {
-            if (e.target.tagName == "BUTTON") {
-                nav.querySelectorAll("button").forEach((element) => {
-                    element.classList.remove("btn-dark");
-                });
-
-                e.target.classList.add("btn-dark");
-            }
-        });
-    });
-</script>
 
 
 @code {
+
+    [SupplyParameterFromForm(FormName = "formPublicacion")]
+    public PublicacionSh publicacion { get; set; } = new PublicacionSh();
+
+    private int modoPublicacion = 1;
+    private string userName = string.Empty;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        userName = await js.InvokeAsync<string>("localStorage.getItem", "nombreUsuario") ?? "Usuario";
+    }
+
+
+    private void actualizarModo(int nuevoModo)
+    {
+        modoPublicacion = nuevoModo;
+    }
+
+    private bool formSubmitted = false;
+    private bool formError = false;
+    private string mensajeError = string.Empty;
+
+
+    private async Task HandlePublicate()
+    {
+
+        try
+        {
+            var resultUsuario = await usuarioService.GetUsuarioByName(userName);
+
+            if (resultUsuario.IdUsuario != 0)
+            {
+                publicacion.Fecha = DateTime.Now;
+
+                Console.WriteLine("Id del usuario que se pasara a crear publicacion: " + resultUsuario.IdUsuario);
+
+                var result = await publicacionService.crearPublicacion(publicacion, resultUsuario);
+
+                if (result.statusCode == 200)
+                {
+                    formSubmitted = true;
+                    formError = false;
+                    
+                }
+                else
+                {
+                    mensajeError = result.mensaje;
+                    formSubmitted = false;
+                    formError = true;
+                }
+
+            }
+            else
+            {
+                mensajeError = "Ocurrio un error obteniendo el usuario";
+                formSubmitted = false;
+                formError = true;
+            }
+
+
+
+        }
+        catch (Exception ex)
+        {
+            mensajeError = "Ocurrio un error al enviar el formulario";
+            formError = true;
+            Console.WriteLine(ex);
+        }
+
+    }
+
+ 
+    
+
 
 }

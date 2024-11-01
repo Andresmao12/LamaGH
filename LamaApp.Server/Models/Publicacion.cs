@@ -11,7 +11,13 @@ public partial class Publicacion
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int IdPublicacion { get; set; }
 
-    public DateTime Fecha { get; set; }
+    public DateTime Fecha { get; set; } = DateTime.Now;
+
+    public string Contenido { get; set; }
+
+    public string? urlImagen { get; set; } = null;
+
+    public int numeroLikes { get; set; } = 0;
 
     public int IdUsuario { get; set; }
 

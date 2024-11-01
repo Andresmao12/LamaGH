@@ -4,9 +4,10 @@ namespace LamaApp.Client.Services.Usuario
 {
     public interface IUsuarioService
     {
-        Task<List<UsuarioSh>> GetUsuario();
+        Task<List<UsuarioSh>> GetUsuarios();
 
-        Task<UsuarioSh> GetUsuario(int id);
+        Task<UsuarioSh> GetUsuarioById(int id);
+        Task<UsuarioSh> GetUsuarioByName(string userName);
         Task<ResponseApi<int>> addUsuario(UsuarioSh usuario);
 
         Task<ResponseApi<bool>> LoginVerif(string nombreUsuario, string plainPassword);

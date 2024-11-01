@@ -64,18 +64,101 @@ namespace LamaApp.Server.Controllers
 
 
         // GET: api/Usuario/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuario(int id)
+        [HttpGet("id/{id}")]
+        public async Task<ResponseApi<UsuarioSh>> GetUsuarioById(int id)
         {
+            var response = new ResponseApi<UsuarioSh>();
             var usuario = await _dbContext.Usuario.FindAsync(id);
 
             if (usuario == null)
             {
-                return NotFound();
+                response.statusCode = 400;
+                response.mensaje = "Usuario no encontrado";
+
+
+            }
+            else
+            {
+                response.statusCode = 200;
+                var ShUsuario = new UsuarioSh
+                {
+                    NombreUsuario = usuario.NombreUsuario,
+                    // Id del capítulo (relacion obligatoria)
+                    IdCapitulo = usuario.IdCapitulo,
+
+                    Nombre = usuario.Nombre,
+                    Apellido = usuario.Apellido,
+                    Cedula = usuario.Cedula,
+                    FechaNacimiento = usuario.FechaNacimiento,
+                    FechaRegistro = usuario.FechaRegistro,
+
+                    // Mapeo de Contacto, verificando de que no sea null
+                    Contacto = usuario.Contacto != null ? new ContactoSh
+                    {
+                        Direccion = usuario.Contacto.Direccion,
+                        Celular = usuario.Contacto.Celular,
+                        Correo = usuario.Contacto.Correo,
+                    } : null,
+
+                    // Mapeo de Pareja, verificando que Pareja no sea null
+                    Pareja = usuario.Pareja != null ? new ParejaSh
+                    {
+                        Nombre = usuario.Pareja.Nombre,
+                        Cedula = usuario.Pareja.Cedula,
+                    } : null,
+
+                    // Mapeo de Motocicleta, verificando que Motocicleta no sea null
+                    Motocicleta = usuario.Motocicleta != null ? new MotocicletaSh
+                    {
+                        Marca = usuario.Motocicleta.Marca,
+                        Modelo = usuario.Motocicleta.Modelo,
+                        Placa = usuario.Motocicleta.Placa,
+                        Cilindrada = usuario.Motocicleta.Cilindrada,
+                    } : null
+                };
+
+                response.response = ShUsuario;
             }
 
-            return usuario;
+            return response;
+            
         }
+
+        // GET: api/Usuario/{nombre}
+        [HttpGet("nombre/{nombre}")]
+        public async Task<ResponseApi<Usuario>> GetUsuarioByNombre(string nombre)
+        {
+            var responseApi = new ResponseApi<Usuario>();
+
+            try
+            {
+                // Busca el usuario en la base de datos
+                var usuario = await _dbContext.Usuario.FirstOrDefaultAsync(u => u.NombreUsuario == nombre);
+
+                // Verifica si se encontró el usuario
+                if (usuario == null)
+                {
+                    responseApi.mensaje = "Usuario no encontrado.";
+                    responseApi.statusCode = 404;
+                    return responseApi;
+                }
+
+                //Considerar mapear el usuario en caso de usarlo ya que el modelo Usuario no es accesible en el cliente
+
+                responseApi.response = usuario; // Devuelve el objeto Usuario directamente
+                responseApi.statusCode = 200;
+            }
+            catch (Exception ex)
+            {
+                responseApi.mensaje = "Error en el servicio getUsuarioByNombre: " + ex.Message;
+                responseApi.statusCode = 500;
+            }
+
+            return responseApi;
+        }
+
+
+
 
 
         [HttpPost]

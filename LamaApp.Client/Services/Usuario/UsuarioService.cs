@@ -15,7 +15,7 @@ namespace LamaApp.Client.Services.Usuario
             _httpClient = httpClient;
         }
 
-        public async Task<List<UsuarioSh>> GetUsuario()
+        public async Task<List<UsuarioSh>> GetUsuarios()
         {
             var result = await _httpClient.GetFromJsonAsync<ResponseApi<List<UsuarioSh>>>("api/Usuario");
 
@@ -29,9 +29,9 @@ namespace LamaApp.Client.Services.Usuario
             }
         }
 
-        public async Task<UsuarioSh> GetUsuario(int id)
+        public async Task<UsuarioSh> GetUsuarioById(int id)
         {
-            var result = await _httpClient.GetFromJsonAsync<ResponseApi<UsuarioSh>>($"api/Usuario/{id}");
+            var result = await _httpClient.GetFromJsonAsync<ResponseApi<UsuarioSh>>($"api/Usuario/id/{id}");
 
             if (result!.statusCode == 200)
             {
@@ -42,6 +42,23 @@ namespace LamaApp.Client.Services.Usuario
                 throw new Exception(result.mensaje);
             }
         }
+
+
+        public async Task<UsuarioSh> GetUsuarioByName(string userName)
+        {
+            var result = await _httpClient.GetFromJsonAsync<ResponseApi<UsuarioSh>>($"api/Usuario/nombre/{userName}");
+
+            if (result!.statusCode == 200)
+            {
+                return result.response;
+            }
+            else
+            {
+                throw new Exception(result.mensaje);
+            }
+            
+        }
+
 
         public async Task<ResponseApi<int>> addUsuario(UsuarioSh usuario)
         {

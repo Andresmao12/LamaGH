@@ -1,8 +1,10 @@
-﻿
+﻿@inject IJSRuntime js
+
+
 <div class="sidebar col">
     <div class="sidebar-header">
         <h1 class="fw-bold fs-2">LAMA</h1>
-        <p class="fs-6 text-secondary">@UserName</p>
+        <p class="fs-6 text-secondary">@userName</p>
     </div>
     <ul class="sidebar-options">
         <li role="button"><a href="/user"><i class="fa-solid fa-house mx-3"></i>Inicio</a></li>
@@ -14,6 +16,14 @@
         <li role="button"><a href="/user/incoming"><i class="fa-regular fa-flag mx-3"></i>Reportes</a></li>
         <li role="button"><a href="/"><i class="fa-solid fa-right-from-bracket mx-3"></i>Salir</a></li>
     </ul>
+
+    <button class="btn btn-primary mb-3 w-75 align-self-center" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="window.location.href = '/user'">
+        Acceso al inicio
+    </button>
+
+    <button class="btn btn-primary w-75 align-self-center" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="window.location.href = '/admin/stats'">
+        Acceso al admin
+    </button>
 </div>
 
 <style>
@@ -34,6 +44,10 @@
 </style>
 
 @code {
-    [Parameter]
-    public string UserName { get; set; } = "Usuario"; // Cambia esto según la lógica de tu aplicación
+    private string userName;
+
+    protected override async Task OnInitializedAsync()
+    {
+        userName = await js.InvokeAsync<string>("localStorage.getItem", "nombreUsuario") ?? "Usuario";
+    }
 }

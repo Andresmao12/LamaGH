@@ -4,6 +4,7 @@ using LamaApp.Server.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LamaApp.Server.Migrations
 {
     [DbContext(typeof(LamaSqlContext))]
-    partial class LamaSqlContextModelSnapshot : ModelSnapshot
+    [Migration("20241101023315_atributosContenidoImgPublicacion")]
+    partial class atributosContenidoImgPublicacion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -236,6 +239,7 @@ namespace LamaApp.Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("urlImagen")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdPublicacion");

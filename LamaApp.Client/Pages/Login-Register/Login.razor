@@ -6,6 +6,7 @@
 
 @inject IUsuarioService usuarioService
 @inject NavigationManager Navigation
+@inject IJSRuntime js
 @inject HttpClient Http
 @layout MainLayout
 
@@ -48,9 +49,14 @@
         </div>
     </div>
 
-
-
 </main>
+
+<script>
+    function guardarUsuarioEnLocalStorage(nombreUsuario) {
+        localStorage.setItem("nombreUsuario", nombreUsuario);
+    }
+</script>
+
 
 @code {
     [SupplyParameterFromForm(FormName = "formLogin")]
@@ -67,10 +73,13 @@
 
             var response = await usuarioService.LoginVerif(user.NombreUsuario, user.Contraseña);
 
-            if (response.statusCode == 200 && response.response)
+            if (response.statusCode == 200)
             {
+                await js.InvokeVoidAsync("guardarUsuarioEnLocalStorage", user.NombreUsuario);
+                
                 // Login exitoso
                 Navigation.NavigateTo("/user");
+                
             }
             else
             {
