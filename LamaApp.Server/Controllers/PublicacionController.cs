@@ -21,7 +21,9 @@ namespace LamaApp.Server.Controllers
 
             var response = new ResponseApi<List<Publicacion>>();
 
-            var publicaciones = await _dbContext.Publicacion.ToListAsync();
+            var publicaciones = await _dbContext.Publicacion
+                .OrderByDescending(p => p.Fecha) // Asumiendo que 'Fecha' es la propiedad que indica la fecha de creación
+                .ToListAsync();
 
             if (publicaciones == null || !publicaciones.Any())
             {

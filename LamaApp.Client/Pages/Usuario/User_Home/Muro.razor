@@ -8,7 +8,7 @@
 @layout UserLayout
 
 <div class="container m-0 w-75 shadow-sm d-flex flex-column gap-2 pt-2">
-    <PostInput />
+    <PostInput OnPublicacionCreada="HandleNewPublicacion" />
 
     @if (isLoading)
     {
@@ -50,5 +50,24 @@
         {
             isLoading = false;
         }
+    }
+
+    private async Task HandleNewPublicacion(PublicacionSh nuevaPublicacion)
+    {
+        try
+        {
+            isLoading = true;
+            hasError = false;
+            publicaciones = await publicacionService.obtenerPublicaciones();
+        }
+        catch (Exception)
+        {
+            hasError = true;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+        StateHasChanged(); 
     }
 }
