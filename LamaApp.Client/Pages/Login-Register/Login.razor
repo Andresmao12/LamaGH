@@ -21,7 +21,7 @@
     @if (formSubmitted)
     {
         <div class="alert alert-success my-3" role="alert">
-            @($"El usuario {user.NombreUsuario} ha sido registrado con éxito.")
+            @($"El usuario {user.NombreUsuario} ha ingresado éxito.")
         </div>
     }
     @if (formError)
@@ -53,6 +53,8 @@
 
 <script>
     function guardarUsuarioEnLocalStorage(nombreUsuario) {
+         localStorage.removeItem('nombreUsuario');
+
         localStorage.setItem("nombreUsuario", nombreUsuario);
     }
 </script>

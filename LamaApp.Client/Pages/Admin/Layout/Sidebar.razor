@@ -1,8 +1,11 @@
-﻿
+﻿@inject NavigationManager Navigation
+@inject IJSRuntime js
+
+
 <div class="sidebar col">
     <div class="sidebar-header">
         <h1 class="fw-bold fs-2">LAMA</h1>
-        <p class="fs-6 text-secondary">@UserName</p>
+        <p class="fs-6 text-secondary">@userName</p>
     </div>
     <ul class="sidebar-options">
         <li role="button"><a href="/admin/stats"><i class="fa-solid fa-chart-simple mx-3"></i>Inicio</a></li>
@@ -10,7 +13,7 @@
         <li role="button"><a href="/admin/events"><i class="fa-regular fa-calendar mx-3"></i>Eventos</a></li>
         <li class="border-bottom my-4"></li>
         <li role="button"><a href="/admin/stats"><i class="fa-regular fa-flag mx-3"></i>Reportes</a></li>
-        <li role="button"><a href="#"><i class="fa-solid fa-right-from-bracket mx-3"></i>Salir</a></li>
+        <li role="button" @onclick="HandleBtnSalir"><a<i class="fa-solid fa-right-from-bracket mx-3"></i>Salir</a></li>
     </ul>
 
 
@@ -41,7 +44,29 @@
     }
 </style>
 
+
+<script>
+    window.clearUsernameFromLocalStorage = () => {
+        localStorage.removeItem('nombreUsuario');
+    };
+</script>
+
+
 @code {
-    [Parameter]
-    public string UserName { get; set; } = "Usuario"; // Cambia esto según la lógica de tu aplicación
+    private string userName;
+
+    protected override async Task OnInitializedAsync()
+    {
+        userName = await js.InvokeAsync<string>("localStorage.getItem", "nombreUsuario") ?? "Anonimo";
+    }
+
+
+    private async Task HandleBtnSalir()
+    {
+        // Llamamos a la función JavaScript para limpiar el localStorage
+        await js.InvokeVoidAsync("clearUsernameFromLocalStorage");
+
+        // Redirigimos a la página principal
+        Navigation.NavigateTo("/", forceLoad: true);
+    }
 }
