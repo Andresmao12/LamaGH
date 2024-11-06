@@ -1,4 +1,4 @@
-﻿<div class="card text-bg-dark">
+﻿<div class="card text-bg-dark" @onclick="OnCardClick">
     <div class="card-img-overlay text-light">
         <div class="text-cont position-absolute z-1">
             <h5 class="card-title">@Titulo</h5>
@@ -52,5 +52,8 @@
 
     [Parameter]
     public string Descripcion { get; set; }
+
+    [Parameter] public EventCallback OnCardClick { get; set; }
+
 
 }
