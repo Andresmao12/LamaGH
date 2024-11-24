@@ -11,7 +11,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5132") });
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://lamaappserver20241124135014.azurewebsites.net/") });
 
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<ICapituloService, CapituloService>();
